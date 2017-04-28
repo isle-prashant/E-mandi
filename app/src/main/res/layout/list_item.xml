@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".3"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/ic_launcher"
+                android:paddingRight="5dp"
+                android:id="@+id/imgThumbnail"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".7"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Product Title"
+                    android:textColor="#000000"
+                    android:textSize="22dp"
+                    android:id="@+id/titleListing" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="₹ Price"
+                    android:textSize="18dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:id="@+id/priceListing"
+                    android:foregroundGravity="center"
+                    android:layout_gravity="bottom|right|end|center_vertical" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/descriptionListing"
+                    android:text="this is just to see how it looks with a whole lot of descriptions is it that it expands or it is just going to fade the rest out don't knw lets see what this gives to us./nits gona be a mistery to be solvedd today. :) :P"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
