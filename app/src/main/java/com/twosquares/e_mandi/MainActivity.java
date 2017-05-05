@@ -77,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        AsyncClass asyncClass = new AsyncClass(this, "ViewLoader");
+        asyncClass.execute("http://"+ip+"/index.json");
 
 
     }
@@ -135,10 +136,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        rowItems.clear();
+//        rowItems.clear();
         Log.e("resumed","true");
-        AsyncClass asyncClass = new AsyncClass(this, "ViewLoader");
-        asyncClass.execute("http://"+ip+"/index.json");
+/*        AsyncClass asyncClass = new AsyncClass(this, "ViewLoader");
+        asyncClass.execute("http://"+ip+"/index.json");*/
     }
 
 

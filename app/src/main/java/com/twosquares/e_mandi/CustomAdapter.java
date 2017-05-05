@@ -1,5 +1,6 @@
 package com.twosquares.e_mandi;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.twosquares.e_mandi.MainActivity.ip;
 
@@ -22,8 +26,9 @@ import static com.twosquares.e_mandi.MainActivity.ip;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     Context context;
-    List <RowItem> rowItem;
+    List<RowItem> rowItem;
     int lastPosition = -1;
+
     public CustomAdapter(Context context, List objects) {
         this.context = context;
         rowItem = objects;
@@ -33,8 +38,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         // each data item is just a string in this case
         public TextView mTitleView, mPriceView, mDescriptionView;
         public ImageView mImageView;
+        public RelativeLayout rl;
+
         public ViewHolder(View v) {
             super(v);
+            rl = (RelativeLayout) v.findViewById(R.id.relativeLayout);
             mTitleView = (TextView) v.findViewById(R.id.titleListing);
             mImageView = (ImageView) v.findViewById(R.id.imgThumbnail);
             mDescriptionView = (TextView) v.findViewById(R.id.descriptionListing);
@@ -77,7 +85,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.mPriceView.setText("₹ " + rowItem.get(position).getPrice());
         holder.mDescriptionView.setText(rowItem.get(position).getDescription());
 //        Picasso.with(context).setLoggingEnabled(true);
-        Picasso.with(context).load("http://"+ip+"/images/thumbnails/" + rowItem.get(position).getImage_id() + ".jpg").into(holder.mImageView);
+        Picasso.with(context).load("http://" + ip + "/images/reduced/" + rowItem.get(position).getImage_id() + ".jpg").into(holder.mImageView);
 
         setAnimation(holder.itemView, position);
     }
@@ -87,9 +95,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         return rowItem.size();
     }
 
-    private void setAnimation(View viewToAnimate, int position){
-        if (position > lastPosition){
-            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+            animation.setDuration(100 * position);
+            viewToAnimate.startAnimation(animation);
+         /*   ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim.setDuration(100 * position);//to make duration random number between [0,501)
+            viewToAnimate.startAnimation(anim);*/
             lastPosition = position;
         }
 

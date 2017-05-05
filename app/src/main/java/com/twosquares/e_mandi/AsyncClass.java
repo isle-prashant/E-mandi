@@ -1,5 +1,7 @@
 package com.twosquares.e_mandi;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
@@ -58,6 +61,9 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        if (action == "ViewLoader"){
+            rowItems.clear();
+        }
         if (action == "UploadData") {
 
             dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
@@ -143,10 +149,28 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             fadeIn.setDuration(400);
             fadeIn.setFillAfter(true);
             set.addAnimation(fadeIn);
-/*
-            Animation slideUp = new TranslateAnimation(0, 0, ViewUtils.getScreenHeight(context),0);
+//            Animation slideUp = new TranslateAnimation(0, 0, ViewUtils.getScreenHeight(context),0);
             RecyclerView.Adapter customAdapter = new CustomAdapter(context, rowItems);
-            MainActivity.mRecyclerView.setAdapter(customAdapter);*/
+
+            AnimationAdapter adapter = new AnimationAdapter(customAdapter) {
+                @Override
+                protected Animator[] getAnimators(View view) {
+                    return new Animator[]{
+
+                            ObjectAnimator.ofFloat(view, "translationY", view.getMeasuredHeight(), 0)
+                    };
+                }
+
+                @Override
+                public long getItemId(final int position) {
+                    return getWrappedAdapter().getItemId(position);
+                }
+            };
+            adapter.setFirstOnly(false);
+            adapter.setDuration(700);
+            adapter.setInterpolator(new OvershootInterpolator(1.5f));
+            MainActivity.mRecyclerView.setAdapter(adapter);
+//            MainActivity.mRecyclerView.setAdapter(customAdapter);
 
 
             mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
