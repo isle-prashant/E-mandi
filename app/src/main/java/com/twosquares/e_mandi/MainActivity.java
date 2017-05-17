@@ -3,43 +3,29 @@ package com.twosquares.e_mandi;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.inputmethodservice.Keyboard;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     ListView lv;
     public static String ip;
     public RowItem item;
     public static RecyclerView mRecyclerView;
     public static List <RowItem> rowItems;
     private RecyclerView.LayoutManager mLayoutManager;
+    public static SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -53,9 +39,11 @@ public class MainActivity extends AppCompatActivity {
         rowItems.clear();
         isStoragePermissionGranted();
 //        lv = (ListView) findViewById(R.id.item_list);
-
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView = (RecyclerView) findViewById(R.id.item_list);
-
+/*        SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
+        mRecyclerView.setItemAnimator(animator);*/
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -143,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onRefresh() {
+        AsyncClass asyncClass = new AsyncClass(MainActivity.this, "ViewLoader");
+        asyncClass.execute("http://"+ip+"/index.json");
+    }
 }
 /*
 https://192.168.0.150/emandi.php*/

@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,6 +35,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.internal.Util;
 
+import static com.twosquares.e_mandi.MainActivity.swipeRefreshLayout;
 import static com.twosquares.e_mandi.SellingActivity.initialLayout;
 import static com.twosquares.e_mandi.SellingActivity.laterLayout;
 
@@ -63,6 +65,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
         super.onPreExecute();
         if (action == "ViewLoader"){
             rowItems.clear();
+            swipeRefreshLayout.setRefreshing(true);
         }
         if (action == "UploadData") {
 
@@ -84,13 +87,14 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             JSONObject jobj;
             try {
                 response = client.newCall(request).execute();
+                Log.e("Address", strings[0]);
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                 res = response.body().string();
                 System.out.println(res);
                 JSONArray arr = new JSONArray(res);
                 for (int i = 0; i < arr.length(); i++) {
                     jobj = arr.getJSONObject(i);
-                    String items[] = new String[]{jobj.getString("title"), jobj.getString("image_id"), jobj.getString("price"), jobj.getString("phoneNo"), jobj.getString("location"), jobj.getString("description")};
+                    String items[] = new String[]{jobj.getString("title"), jobj.getString("image_id"), jobj.getString("price"), jobj.getString("phoneNo"), jobj.getString("location"), jobj.getString("description"), "true"};
 
                     String image_id = jobj.getString("image_id");
                     item = new RowItem(items);
@@ -151,7 +155,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             set.addAnimation(fadeIn);
 //            Animation slideUp = new TranslateAnimation(0, 0, ViewUtils.getScreenHeight(context),0);
             RecyclerView.Adapter customAdapter = new CustomAdapter(context, rowItems);
-
+/*
             AnimationAdapter adapter = new AnimationAdapter(customAdapter) {
                 @Override
                 protected Animator[] getAnimators(View view) {
@@ -169,11 +173,18 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             adapter.setFirstOnly(false);
             adapter.setDuration(700);
             adapter.setInterpolator(new OvershootInterpolator(1.5f));
-            MainActivity.mRecyclerView.setAdapter(adapter);
-//            MainActivity.mRecyclerView.setAdapter(customAdapter);
+            MainActivity.mRecyclerView.setAdapter(adapter);*/
+/*            SlideInBottomAnimationAdapter slideAdapter = new SlideInBottomAnimationAdapter(customAdapter);
+            slideAdapter.setFirstOnly(true);
 
+            slideAdapter.setInterpolator(new OvershootInterpolator(4.5f));
+            slideAdapter.setDuration(1000);
+            mRecyclerView.setAdapter(slideAdapter);*/
+            MainActivity.mRecyclerView.setAdapter(customAdapter);
+            customAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
 
-            mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
+        /*    mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View childView, int position) {
                     Log.e("size of rowItems after", "" + rowItems.size());
@@ -189,7 +200,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 public void onItemLongPress(View childView, int position) {
 
                 }
-            }));
+            }));*/
         }
         if (action == "UploadData"){
             if (dialog != null)

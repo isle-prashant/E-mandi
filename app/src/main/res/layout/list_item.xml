@@ -4,128 +4,108 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         card_view:cardElevation="4dp"
         card_view:cardUseCompatPadding="true">
 
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:id="@+id/relativeLayout"
-            android:layout_height="match_parent">
-
-
-
-            <android.support.percent.PercentRelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:id="@+id/some"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/imgThumbnail"
-                    app:layout_widthPercent="100%"
-                    app:layout_aspectRatio="178%"
-                    android:clickable="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY" />
-            </android.support.percent.PercentRelativeLayout>
-
-
-            <TextView
-                android:id="@+id/titleListing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/some"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp"
-                android:textColor="#4c4c4c"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/descriptionListing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/titleListing"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textSize="12dp" />
-
-            <TextView
-                android:id="@+id/priceListing"
-                android:layout_width="20dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/imgThumbnail"
-                android:layout_marginTop="10dp"
-                android:scaleType="centerCrop" />
-
-        </RelativeLayout>
-
-<!--
         <LinearLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
+
+            <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/some"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".5"
-                android:adjustViewBounds="true"
-                android:src="@mipmap/ic_launcher"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitXY"
-                android:id="@+id/imgThumbnail"/>
+                android:layout_height="150dp">
+
+                <ImageView
+                    android:id="@+id/imgThumbnail"
+                    android:adjustViewBounds="true"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    app:layout_aspectRatio="178%"
+                    app:layout_widthPercent="100%" />
+            </android.support.percent.PercentRelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_weight=".5"
-                android:layout_height="0dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".7"
                     android:layout_marginTop="8dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="Product Title"
-                    android:textColor="#000000"
-                    android:textSize="22dp"
-                    android:id="@+id/titleListing" />
+                    android:layout_marginRight="15dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="₹ Price"
-                    android:textSize="18dp"
+                    <TextView
+                        android:id="@+id/titleListing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Product Title"
+                        android:textColor="#4c4c4c"
+                        android:textSize="22dp" />
+
+                    <TextView
+                        android:id="@+id/descriptionListing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="8dp"
+                        android:text="this is just to see how it looks with a whole lot of descriptions is it that it expands or it is just going to fade the rest out don't knw lets see what this gives to us./nits gona be a mistery to be solvedd today. :) :P" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".3"
+                    android:layout_marginTop="8dp"
                     android:paddingRight="10dp"
-                    android:paddingBottom="10dp"
-                    android:id="@+id/priceListing"
-                    android:foregroundGravity="center"
-                    android:layout_gravity="bottom|right|end|center_vertical" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/descriptionListing"
-                    android:text="this is just to see how it looks with a whole lot of descriptions is it that it expands or it is just going to fade the rest out don't knw lets see what this gives to us./nits gona be a mistery to be solvedd today. :) :P"/>
+                    android:orientation="vertical">
+
+
+                    <ImageView
+                        android:id="@+id/icon_star"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="end"
+                        android:adjustViewBounds="true"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_star_border_black_24dp"
+                        android:tint="@color/icon_tint_normal" />
+
+                    <TextView
+                        android:id="@+id/priceListing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right|end|center_vertical"
+                        android:foregroundGravity="center"
+                        android:layout_marginTop="8dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="5dp"
+                        android:text="₹ Price"
+                        android:textSize="18dp" />
+                </LinearLayout>
             </LinearLayout>
 
+
         </LinearLayout>
--->
-
-
-
 
 
     </android.support.v7.widget.CardView>

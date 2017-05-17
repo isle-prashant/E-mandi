@@ -14,6 +14,7 @@ public class RowItem implements Serializable {
     private String contact;
     private String location;
     private String description;
+    private Boolean important;
 
     public RowItem(String items[]){
         this.title = items[0];
@@ -22,6 +23,7 @@ public class RowItem implements Serializable {
         this.contact = items[3];
         this.location = items[4];
         this.description = items[5];
+        this.important = Boolean.valueOf(items[6]);
 
     }
 
@@ -46,5 +48,13 @@ public class RowItem implements Serializable {
     }
     public String getDescription(){
         return description;
+    }
+
+    public boolean isImportant() {
+        return important;
+    }
+
+    public void setImportant(boolean important) {
+        this.important = important;
     }
 }

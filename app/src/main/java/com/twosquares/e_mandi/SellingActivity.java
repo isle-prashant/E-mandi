@@ -26,6 +26,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,6 +61,7 @@ public class SellingActivity extends AppCompatActivity {
     public EditText priceTxt, descTxt, locationTxt, contactTxt, titleTxt;
     public static LinearLayout initialLayout, laterLayout;
     public static String image_id = null;
+    int PLACE_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,23 @@ public class SellingActivity extends AppCompatActivity {
         priceTxt = (EditText) findViewById(R.id.editPrice);
         descTxt = (EditText) findViewById(R.id.editDescription);
         locationTxt = (EditText) findViewById(R.id.editLocation);
+        locationTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                Intent intent;
+                try {
+                    intent = builder.build(getApplicationContext());
+                    startActivityForResult(intent, PLACE_REQUEST);
+
+
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         contactTxt = (EditText) findViewById(R.id.editContact);
         titleTxt = (EditText) findViewById(R.id.editTitle);
         btpic.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +165,8 @@ public class SellingActivity extends AppCompatActivity {
                 Uri selectedImage = data.getData();
 
                 filePath = getPath(selectedImage);
-                String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
+                grabimage(selectedImage, imPreview);
+               /* String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
                 System.out.println(selectedImage);
                 if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
                     //FINE
@@ -150,7 +174,16 @@ public class SellingActivity extends AppCompatActivity {
                 } else {
                     //NOT IN REQUIRED FORMAT
                     Toast.makeText(this, "Cannot Open the file", Toast.LENGTH_SHORT).show();
-                }
+                }*/
+            }
+        }
+
+        if (requestCode == PLACE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                Log.e("Place : ", ""+place.getLatLng());
+                String address = String.format(""+place.getAddress());
+                locationTxt.setText(address);
             }
         }
     }

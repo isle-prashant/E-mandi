@@ -4,4 +4,6 @@
     <!--<string name="ip"> 10.216.82.80/E-mandi</string>-->
     <string name="ip">emandi.esy.es</string>
     <string name="title_activity_product_details">ProductDetails</string>
+
+    <string name="google_place_api">AIzaSyDfzs_GMDJRC6wv8Mc7Nv0eBe3UTcZs_6U</string>
 </resources>
