@@ -11,18 +11,18 @@
     tools:context="com.twosquares.e_mandi.MainActivity"
     tools:showIn="@layout/activity_main">
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+        android:id="@+id/swipe_refresh_layout1"
         android:layout_width="match_parent"
         android:layout_marginBottom="50dp"
         android:layout_height="wrap_content">
 
-    <android.support.v7.widget.RecyclerView
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbarSize="@null"
-        android:overScrollMode="never"
-        android:id="@+id/item_list"/>
+        <android.support.v7.widget.RecyclerView
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarSize="@null"
+            android:overScrollMode="never"
+            android:id="@+id/item_list1"/>
     </android.support.v4.widget.SwipeRefreshLayout>
     <!--
     <ListView

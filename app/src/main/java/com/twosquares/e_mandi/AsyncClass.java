@@ -35,9 +35,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.internal.Util;
 
+import static com.twosquares.e_mandi.DashboardActivity.mRecyclerViewDashboard;
+import static com.twosquares.e_mandi.DashboardActivity.rowItemList;
+import static com.twosquares.e_mandi.DashboardActivity.swipeRefreshLayoutDashboard;
+import static com.twosquares.e_mandi.MainActivity.rowItems;
 import static com.twosquares.e_mandi.MainActivity.swipeRefreshLayout;
+import static com.twosquares.e_mandi.MainActivity.user;
 import static com.twosquares.e_mandi.SellingActivity.initialLayout;
 import static com.twosquares.e_mandi.SellingActivity.laterLayout;
+import static com.twosquares.e_mandi.User.stars;
 
 /**
  * Created by PRASHANT on 27-04-2017.
@@ -74,11 +80,16 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
         }
+        if (action == "DashboardViewLoader"){
+            rowItems.clear();
+            rowItemList.clear();
+            swipeRefreshLayoutDashboard.setRefreshing(true);
+        }
     }
 
     @Override
     protected Void doInBackground(String... strings) {
-        if (action == "ViewLoader") {
+        if (action == "ViewLoader" || action == "DashboardViewLoader") {
             Request request = new Request.Builder()
                     .url(strings[0])
                     .build();
@@ -94,7 +105,11 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 JSONArray arr = new JSONArray(res);
                 for (int i = 0; i < arr.length(); i++) {
                     jobj = arr.getJSONObject(i);
-                    String items[] = new String[]{jobj.getString("title"), jobj.getString("image_id"), jobj.getString("price"), jobj.getString("phoneNo"), jobj.getString("location"), jobj.getString("description"), "true"};
+                    String star = "false";
+                    if (stars.contains(jobj.getString("image_id"))){
+                        star = "true";
+                    }
+                    String items[] = new String[]{jobj.getString("title"), jobj.getString("image_id"), jobj.getString("price"), jobj.getString("phoneNo"), jobj.getString("location"), jobj.getString("description"), star, jobj.getString("ownerId"), jobj.getString("quantity")};
 
                     String image_id = jobj.getString("image_id");
                     item = new RowItem(items);
@@ -117,9 +132,40 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                     .add("description", strings[4])
                     .add("phoneNo", strings[5])
                     .add("title", strings[6])
+                    .add("userId", user.userId)
+                    .add("quantity", strings[7])
                     .build();
 
 
+            Request request = new Request.Builder()
+                    .url(strings[0])
+                    .post(requestBody)
+                    .build();
+
+            try {
+                response = client.newCall(request).execute();
+                if (!response.isSuccessful()) {
+                    resCode = 201;
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    resCode = 200;
+                    System.out.println(response.body().string());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        if (action == "Star"){
+            Response response = null;
+            RequestBody requestBody = new FormBody.Builder()
+                    .add("userId", strings[1])
+                    .add("imageId", strings[2])
+                    .add("ownerId", strings[3])
+                    .add("userName", strings[4])
+                    .build();
+
+            Log.e("Push user", strings[4]);
             Request request = new Request.Builder()
                     .url(strings[0])
                     .post(requestBody)
@@ -155,31 +201,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             set.addAnimation(fadeIn);
 //            Animation slideUp = new TranslateAnimation(0, 0, ViewUtils.getScreenHeight(context),0);
             RecyclerView.Adapter customAdapter = new CustomAdapter(context, rowItems);
-/*
-            AnimationAdapter adapter = new AnimationAdapter(customAdapter) {
-                @Override
-                protected Animator[] getAnimators(View view) {
-                    return new Animator[]{
 
-                            ObjectAnimator.ofFloat(view, "translationY", view.getMeasuredHeight(), 0)
-                    };
-                }
-
-                @Override
-                public long getItemId(final int position) {
-                    return getWrappedAdapter().getItemId(position);
-                }
-            };
-            adapter.setFirstOnly(false);
-            adapter.setDuration(700);
-            adapter.setInterpolator(new OvershootInterpolator(1.5f));
-            MainActivity.mRecyclerView.setAdapter(adapter);*/
-/*            SlideInBottomAnimationAdapter slideAdapter = new SlideInBottomAnimationAdapter(customAdapter);
-            slideAdapter.setFirstOnly(true);
-
-            slideAdapter.setInterpolator(new OvershootInterpolator(4.5f));
-            slideAdapter.setDuration(1000);
-            mRecyclerView.setAdapter(slideAdapter);*/
             MainActivity.mRecyclerView.setAdapter(customAdapter);
             customAdapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
@@ -202,11 +224,26 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 }
             }));*/
         }
+        if (action == "DashboardViewLoader"){
+            for (int i = 0; i < rowItems.size(); i ++){
+                if (rowItems.get(i).getOwner_id().equals(user.userId)){
+                    rowItemList.add(rowItems.get(i));
+                }
+            }
+            RecyclerView.Adapter customAdapter2 = new CustomAdapter2(context, rowItemList);
+            mRecyclerViewDashboard.setAdapter(customAdapter2);
+            customAdapter2.notifyDataSetChanged();
+            swipeRefreshLayoutDashboard.setRefreshing(false);
+        }
         if (action == "UploadData"){
             if (dialog != null)
                 dialog.dismiss();
-            if (resCode == 200)
-                ((Activity)context).finish();
+            if (resCode == 200) {
+                Intent i = new Intent(context,MainActivity.class);
+                ((Activity) context).finish();
+                ((Activity) context).startActivity(i);
+
+            }
             else {
                 Toast.makeText(context,"Something went Wronng",Toast.LENGTH_SHORT);
                 initialLayout.setVisibility(View.VISIBLE);

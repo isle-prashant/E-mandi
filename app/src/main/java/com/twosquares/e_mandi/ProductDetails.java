@@ -21,6 +21,7 @@ public class ProductDetails extends AppCompatActivity {
         TextView Description = (TextView) findViewById(R.id.detailDescription);
         TextView Location = (TextView) findViewById(R.id.detailLocation);
         TextView Contact = (TextView) findViewById(R.id.detailContact);
+        TextView Quantity = (TextView) findViewById(R.id.detailQuantity);
 //        String image_id = getIntent().getExtra("image_id");
         RowItem rowItem = (RowItem) getIntent().getExtras().getSerializable("position");
         Picasso.with(this).load("http://"+ip+"/images/reduced/" +  rowItem.getImage_id() + ".jpg").into(iv);
@@ -29,6 +30,7 @@ public class ProductDetails extends AppCompatActivity {
         Description.setText(rowItem.getDescription());
         Location.setText(rowItem.getLocation());
         Contact.setText(rowItem.getContact());
+        Quantity.setText(rowItem.getQuantity() + " Kg(s)");
     }
 
 }

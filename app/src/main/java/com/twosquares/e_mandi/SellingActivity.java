@@ -13,10 +13,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +53,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.twosquares.e_mandi.MainActivity.user;
+
 public class SellingActivity extends AppCompatActivity {
 
     Button btpic, btnup, btPostAd;
@@ -58,11 +64,37 @@ public class SellingActivity extends AppCompatActivity {
     static String encodedImage;
     static String filePath;
     public static String ip;
-    public EditText priceTxt, descTxt, locationTxt, contactTxt, titleTxt;
+    public EditText priceTxt, descTxt, locationTxt, quantityTxt, titleTxt;
     public static LinearLayout initialLayout, laterLayout;
     public static String image_id = null;
     int PLACE_REQUEST = 2;
 
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        Fragment fragment;
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    Intent i = new Intent(SellingActivity.this,MainActivity.class);
+                    finish();
+                    startActivity(i);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_in_left);
+                    return true;
+                case R.id.navigation_dashboard:
+                    Intent intent = new Intent(SellingActivity.this,DashboardActivity.class);
+                    finish();
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_in_left);
+                    return true;
+                case R.id.navigation_notifications:
+                    return true;
+            }
+            return false;
+        }
+
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +113,7 @@ public class SellingActivity extends AppCompatActivity {
         priceTxt = (EditText) findViewById(R.id.editPrice);
         descTxt = (EditText) findViewById(R.id.editDescription);
         locationTxt = (EditText) findViewById(R.id.editLocation);
+        quantityTxt = (EditText) findViewById(R.id.editQuantity);
         locationTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +131,7 @@ public class SellingActivity extends AppCompatActivity {
                 }
             }
         });
-        contactTxt = (EditText) findViewById(R.id.editContact);
+
         titleTxt = (EditText) findViewById(R.id.editTitle);
         btpic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,13 +154,18 @@ public class SellingActivity extends AppCompatActivity {
                 String price = String.valueOf(priceTxt.getText());
                 String location = String.valueOf(locationTxt.getText());
                 String Description = String.valueOf(descTxt.getText());
-                String contact = String.valueOf(contactTxt.getText());
+                String contact = user.phoneNo;
                 String Title = String.valueOf(titleTxt.getText());
+                String quantity = String.valueOf(quantityTxt.getText());
                 AsyncClass asyncClass = new AsyncClass(SellingActivity.this, "UploadData");
-                asyncClass.execute("http://" + ip + "/image.php",encodedImage,price, location, Description, contact, Title);
+                asyncClass.execute("http://" + ip + "/image.php",encodedImage,price, location, Description, contact, Title, quantity);
 
             }
         });
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.navigation_notifications);
     }
 
 

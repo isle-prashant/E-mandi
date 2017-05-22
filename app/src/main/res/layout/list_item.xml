@@ -91,16 +91,28 @@
                         android:tint="@color/icon_tint_normal" />
 
                     <TextView
-                        android:id="@+id/priceListing"
+                    android:id="@+id/priceListing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right|end|center_vertical"
+                    android:foregroundGravity="center"
+                    android:layout_marginTop="8dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="5dp"
+                    android:text="₹ Price"
+                    android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/quantityListing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|right|end|center_vertical"
                         android:foregroundGravity="center"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="3dp"
                         android:paddingBottom="10dp"
                         android:paddingLeft="5dp"
                         android:text="₹ Price"
-                        android:textSize="18dp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
             </LinearLayout>
 

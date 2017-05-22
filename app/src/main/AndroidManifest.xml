@@ -32,6 +32,14 @@
         <activity
             android:name=".ProductDetails"
             android:label="@string/title_activity_product_details"></activity>
+
+        <activity android:name=".UserLogin"
+            android:label="User login"/>
+        <activity android:name=".UserRegister"
+            android:label="Registration"></activity>
+
+        <activity android:name=".DashboardActivity" />
+        <activity android:name=".SplashScreen" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.android.fileProvider"

@@ -24,6 +24,7 @@ import java.util.Random;
 
 import static com.twosquares.e_mandi.MainActivity.ip;
 import static com.twosquares.e_mandi.MainActivity.rowItems;
+import static com.twosquares.e_mandi.MainActivity.user;
 
 /**
  * Created by PRASHANT on 15-11-2016.
@@ -41,7 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         // each data item is just a string in this case
-        public TextView mTitleView, mPriceView, mDescriptionView;
+        public TextView mTitleView, mPriceView, mDescriptionView, mQuantity;
         public ImageView mImageView, mStar;
         public RelativeLayout rl;
         Context mContext;
@@ -54,6 +55,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             mDescriptionView = (TextView) v.findViewById(R.id.descriptionListing);
             mPriceView = (TextView) v.findViewById(R.id.priceListing);
             mStar = (ImageView) v.findViewById(R.id.icon_star);
+            mQuantity = (TextView) v.findViewById(R.id.quantityListing);
             mStar.setOnClickListener(this);
             mImageView.setOnClickListener(this);
             v.setOnClickListener(this);
@@ -66,11 +68,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         @Override
         public void onClick(View v) {
             if (v.getId() == mStar.getId()) {
-                Toast.makeText(mContext, "Hey there", Toast.LENGTH_SHORT).show();
+                UserLocalStore userLocalStore= new UserLocalStore(mContext);
                 RowItem Item = rowItem.get(getAdapterPosition());
                 Item.setImportant(!Item.isImportant());
+                userLocalStore.setStar(Item.getImage_id(),Item.getImage_id(),Item.getOwner_id());
                 rowItem.set(getAdapterPosition(), Item);
                 CustomAdapter.this.notifyDataSetChanged();
+
             }
             else{
                 Intent intent = new Intent(mContext, ProductDetails.class);
@@ -112,7 +116,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.mTitleView.setText(rowItem.get(position).getTitle());
         holder.mPriceView.setText("₹ " + rowItem.get(position).getPrice());
         holder.mDescriptionView.setText(rowItem.get(position).getDescription());
+        holder.mQuantity.setText(rowItem.get(position).getQuantity()+" Kg(s)");
 //        Picasso.with(context).setLoggingEnabled(true);
+        if (rowItems.get(position).getOwner_id().equals(user.userId)){
+            holder.mStar.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.mStar.setVisibility(View.VISIBLE);
+        }
         Picasso.with(context).load("http://" + ip + "/images/reduced/" + rowItem.get(position).getImage_id() + ".jpg").into(holder.mImageView);
         applyImportant(holder, rowItem.get(position));
         setAnimation(holder.itemView, position);

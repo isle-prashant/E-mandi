@@ -15,6 +15,8 @@ public class RowItem implements Serializable {
     private String location;
     private String description;
     private Boolean important;
+    private String owner_id;
+    private String quantity;
 
     public RowItem(String items[]){
         this.title = items[0];
@@ -24,11 +26,17 @@ public class RowItem implements Serializable {
         this.location = items[4];
         this.description = items[5];
         this.important = Boolean.valueOf(items[6]);
+        this.owner_id = items[7];
+        this.quantity = items[8];
 
     }
 
     public String getImage_id() {
         return image_id;
+    }
+
+    public String getOwner_id() {
+        return owner_id;
     }
 
     public String getTitle() {
@@ -49,6 +57,7 @@ public class RowItem implements Serializable {
     public String getDescription(){
         return description;
     }
+    public String getQuantity(){ return quantity;}
 
     public boolean isImportant() {
         return important;
