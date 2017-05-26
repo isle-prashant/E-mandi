@@ -57,7 +57,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
     public RowItem item;
     ProgressDialog dialog;
     int resCode = 0;
-
+    String deletedId;
     AsyncClass(Context context, String action) {
         this.context = context;
         this.action = action;
@@ -84,6 +84,12 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             rowItems.clear();
             rowItemList.clear();
             swipeRefreshLayoutDashboard.setRefreshing(true);
+        }
+        if (action == "DeletePost"){
+            dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+            dialog.setMessage("Deleting data  \nPlease Wait");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
         }
     }
 
@@ -185,6 +191,34 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             }
             return null;
         }
+
+        if (action == "DeletePost"){
+            Response response = null;
+
+            RequestBody requestBody = new FormBody.Builder()
+                    .add("imageId", strings[1])
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(strings[0])
+                    .post(requestBody)
+                    .build();
+
+            try {
+                response = client.newCall(request).execute();
+                if (!response.isSuccessful()) {
+                    resCode = 201;
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    resCode = 200;
+                    System.out.println(response.body().string());
+                    deletedId = strings[2];
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
         return null;
     }
 
@@ -248,6 +282,17 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 Toast.makeText(context,"Something went Wronng",Toast.LENGTH_SHORT);
                 initialLayout.setVisibility(View.VISIBLE);
                 laterLayout.setVisibility(View.GONE);
+            }
+        }
+        if (action == "DeletePost"){
+            if (dialog != null)
+                dialog.dismiss();
+            if (resCode == 200) {
+                ((Activity) context).finish();
+                rowItemList.remove(rowItemList.get(Integer.parseInt(deletedId)));
+                RecyclerView.Adapter customAdapter2 = new CustomAdapter2(context, rowItemList);
+                mRecyclerViewDashboard.setAdapter(customAdapter2);
+                customAdapter2.notifyDataSetChanged();
             }
         }
     }

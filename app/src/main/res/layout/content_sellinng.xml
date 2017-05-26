@@ -84,7 +84,8 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="2dp"
                 android:layout_weight=".5"
-                android:hint="Title" />
+                android:hint="Title"
+                android:inputType="textCapSentences"/>
 
             <EditText
                 android:id="@+id/editPrice"
@@ -100,6 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight=".5"
+                android:inputType="number"
                 android:hint="Quantity in Kgs" />
 
             <EditText

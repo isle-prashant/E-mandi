@@ -62,7 +62,9 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
 
                 Intent intent = new Intent(mContext, ProductDetails.class);
                 Log.e("position", "" + getAdapterPosition());
-                intent.putExtra("position", rowItem.get(getAdapterPosition()));
+                intent.putExtra("rowItem", rowItem.get(getAdapterPosition()));
+            intent.putExtra("position", getAdapterPosition());
+                intent.putExtra("Adapter","CustomAdapter2");
                 System.out.println("selected row " + rowItem.get(getAdapterPosition()).getImage_id());
                 mContext.startActivity(intent);
         }
