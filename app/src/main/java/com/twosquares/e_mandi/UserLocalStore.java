@@ -36,8 +36,12 @@ public class UserLocalStore {
         spEditor.putString("password", user.password);
         spEditor.putString("phoneNo", user.phoneNo);
         spEditor.putString("userId",user.userId);
+        //set of stars
         Set<String> set = new HashSet<String>();
         spEditor.putStringSet("stars",set);
+        //set of user who stared the product
+        Set<String> set1 = new HashSet<String>();
+        spEditor.putStringSet("userStars",set1);
         System.out.println(user);
         spEditor.commit();
     }
@@ -48,9 +52,14 @@ public class UserLocalStore {
         String password = userLocalDatabase.getString("password","");
         String phoneNo = userLocalDatabase.getString("phoneNo","");
         String userId = userLocalDatabase.getString("userId","");
+        //list of stared products
         Set<String> set = userLocalDatabase.getStringSet("stars", new HashSet<String>());
         ArrayList<String> listStar = new ArrayList<String>();
         listStar.addAll(set);
+        //list of products stared
+        Set<String> set1 = userLocalDatabase.getStringSet("userStars", new HashSet<String>());
+        ArrayList<String> userStar = new ArrayList<String>();
+        userStar.addAll(set1);
         Log.e("Set", ""+ set);
         User storeduser = new User(name, age, email, password, phoneNo,userId,listStar);
         return  storeduser;
@@ -103,7 +112,7 @@ public class UserLocalStore {
             stars.remove(id);
         }
         set.addAll(stars);
-        spEditor.putStringSet("Stars",set);
+        spEditor.putStringSet("stars",set);
         spEditor.commit();
     }
 

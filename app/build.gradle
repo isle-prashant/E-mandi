@@ -10,6 +10,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [manifestApplicationId         : "${applicationId}",
+                                pushbots_app_id               : "591aed384a9efad0e68b4567",
+                                pushbots_loglevel             : "DEBUG",
+                                google_sender_id              : "262575212437"]
     }
     buildTypes {
         release {
@@ -40,5 +44,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.android.support:percent:23.1.1'
     compile 'com.google.android.gms:play-services:7.3.0'
+    compile 'com.google.android.gms:play-services-gcm:+'
+    compile 'com.pushbots:pushbots-lib:3.0.1@aar'
     testCompile 'junit:junit:4.12'
 }

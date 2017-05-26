@@ -1,5 +1,6 @@
 package com.twosquares.e_mandi;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import static com.twosquares.e_mandi.MainActivity.ip;
 import static com.twosquares.e_mandi.MainActivity.user;
+import static com.twosquares.e_mandi.UserLocalStore.SP_NAME;
 
 public class ProductDetails extends AppCompatActivity {
 
@@ -18,6 +20,7 @@ public class ProductDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_product_details);
+        SharedPreferences sp = this.getSharedPreferences(SP_NAME, 0);
         ImageView iv = (ImageView) findViewById(R.id.fullImage);
         TextView Title = (TextView) findViewById(R.id.detailTitle);
         TextView Price = (TextView) findViewById(R.id.detailPrice);
@@ -28,7 +31,7 @@ public class ProductDetails extends AppCompatActivity {
         Button btnDeletePost = (Button) findViewById(R.id.btnDeltePost);
 //        String image_id = getIntent().getExtra("image_id");
         final RowItem rowItem = (RowItem) getIntent().getExtras().getSerializable("rowItem");
-        if (rowItem.getOwner_id().equals(user.userId) && getIntent().getExtras().getString("Adapter").equals("CustomAdapter2")){
+        if (rowItem.getOwner_id().equals(sp.getString("userId","")) && getIntent().getExtras().getString("Adapter").equals("CustomAdapter2")){
             btnDeletePost.setVisibility(View.VISIBLE);
         }
         Picasso.with(this).load("http://"+ip+"/images/reduced/" +  rowItem.getImage_id() + ".jpg").into(iv);
@@ -42,9 +45,10 @@ public class ProductDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AsyncClass asyncClass = new AsyncClass(ProductDetails.this,"DeletePost");
-                asyncClass.execute("http://" + ip + "/deletePost.php", rowItem.getImage_id(), String.valueOf(getIntent().getExtras().getInt("position")));
+                asyncClass.execute("http://" + ip + "/deletePost.php", rowItem.getImage_id());
             }
         });
     }
 
 }
+//, String.valueOf(getIntent().getExtras().getInt("position"))

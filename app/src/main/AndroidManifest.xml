@@ -17,7 +17,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".MyApplication">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -31,7 +32,14 @@
         <activity android:name=".SellingActivity" />
         <activity
             android:name=".ProductDetails"
-            android:label="@string/title_activity_product_details"></activity>
+            android:label="@string/title_activity_product_details"
+            >
+            <intent-filter>
+                <action android:name="com.example.sampleapp.Next" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".UserLogin"
             android:label="User login"/>
@@ -49,6 +57,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <receiver android:name=".customHandler" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_place_api"></meta-data>
     </application>
 

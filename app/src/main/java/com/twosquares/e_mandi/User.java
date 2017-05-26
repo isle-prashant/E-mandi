@@ -32,6 +32,15 @@ public class User {
         this.stars = listStar;
     }
 
+    public User(String[] user) {
+        this.name = user[0];
+        this.age= Integer.parseInt(user[1]);
+        this.email = user[2];
+        this.password = user[3];
+        this.phoneNo = user[4];
+        this.userId = user[5];
+    }
+
     public void removeUser (){
         this.name = "";
         this.age= -1;

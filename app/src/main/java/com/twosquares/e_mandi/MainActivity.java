@@ -23,6 +23,10 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.pushbots.push.Pushbots;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     public static SwipeRefreshLayout swipeRefreshLayout;
     UserLocalStore userLocalStore;
     public static User user;
-    public static boolean openSplash = true;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         Fragment fragment;
@@ -65,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (openSplash) {
-            openSplash = false;
-            startActivity(new Intent(this, SplashScreen.class));
-        }
+//       initializing pushbots
+        initPushbots();
+
+//      logged in user data from shared preference
         userLocalStore= new UserLocalStore(this);
         if (authenticate()==true){
             user = userLocalStore.getLoggedinUser();
@@ -109,7 +112,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
     }
-
+    private void initPushbots(){
+        Pushbots.sharedInstance().registerForRemoteNotifications();
+        Pushbots.sharedInstance().setCustomHandler(customHandler.class);
+        //set alias to test
+        Pushbots.sharedInstance().setAlias("username");
+    }
     @Override
     protected void onStart() {
         super.onStart();

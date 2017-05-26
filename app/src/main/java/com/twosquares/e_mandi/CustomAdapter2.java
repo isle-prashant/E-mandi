@@ -25,7 +25,7 @@ import static com.twosquares.e_mandi.MainActivity.user;
  * Created by PRASHANT on 22-05-2017.
  */
 
-public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHolder>{
+public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHolder> {
     Context context;
     List<RowItem> rowItem;
     int lastPosition = -1;
@@ -35,7 +35,7 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
         rowItem = objects;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
         public TextView mTitleView, mPriceView, mDescriptionView;
         public ImageView mImageView;
@@ -60,13 +60,13 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
         @Override
         public void onClick(View v) {
 
-                Intent intent = new Intent(mContext, ProductDetails.class);
-                Log.e("position", "" + getAdapterPosition());
-                intent.putExtra("rowItem", rowItem.get(getAdapterPosition()));
+            Intent intent = new Intent(mContext, ProductDetails.class);
+            Log.e("position", "" + getAdapterPosition());
+            intent.putExtra("rowItem", rowItem.get(getAdapterPosition()));
             intent.putExtra("position", getAdapterPosition());
-                intent.putExtra("Adapter","CustomAdapter2");
-                System.out.println("selected row " + rowItem.get(getAdapterPosition()).getImage_id());
-                mContext.startActivity(intent);
+            intent.putExtra("Adapter", "CustomAdapter2");
+            System.out.println("selected row " + rowItem.get(getAdapterPosition()).getImage_id());
+            mContext.startActivity(intent);
         }
     }
 
@@ -97,14 +97,13 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
     public void onBindViewHolder(CustomAdapter2.ViewHolder holder, final int position) {
 
 
-
-            holder.mTitleView.setText(rowItem.get(position).getTitle());
-            holder.mPriceView.setText("₹ " + rowItem.get(position).getPrice());
-            holder.mDescriptionView.setText(rowItem.get(position).getDescription());
+        holder.mTitleView.setText(rowItem.get(position).getTitle());
+        holder.mPriceView.setText("₹ " + rowItem.get(position).getPrice());
+        holder.mDescriptionView.setText(rowItem.get(position).getDescription());
 //        Picasso.with(context).setLoggingEnabled(true);
 
 
-            Picasso.with(context).load("http://" + ip + "/images/thumbnails/" + rowItem.get(position).getImage_id() + ".jpg").into(holder.mImageView);
+        Picasso.with(context).load("http://" + ip + "/images/thumbnails/" + rowItem.get(position).getImage_id() + ".jpg").into(holder.mImageView);
 
 
     }
