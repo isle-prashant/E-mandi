@@ -4,8 +4,8 @@
     tools:context="com.twosquares.e_mandi.MainActivity">
     <item
         android:id="@+id/action_logout"
+        android:icon="@drawable/ic_user"
         android:orderInCategory="100"
         android:title="Logout"
-        android:icon="@drawable/ic_logout"
         app:showAsAction="always" />
 </menu>

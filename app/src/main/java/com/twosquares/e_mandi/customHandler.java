@@ -23,13 +23,14 @@ import static com.twosquares.e_mandi.User.stars;
 
 public class customHandler extends BroadcastReceiver
 {
-    private String TAG = "PB3";
-
     public RowItem item;
+    private String TAG = "PB3";
 
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        UserLocalStore userLocalStore = new UserLocalStore(context);
+
         String action = intent.getAction();
         Log.d(TAG, "action=" + action);
 
@@ -49,15 +50,9 @@ public class customHandler extends BroadcastReceiver
             JSONObject jobj;
             try {
                 jobj = new JSONObject(product);
-                Log.e("Title", ""+ jobj.getString("title"));
-                Log.e("ID", ""+jobj.getString("id"));
-                String productId = jobj.getString("id");
                 String items[]  = new String[]{jobj.getString("title"), jobj.getString("id"), jobj.getString("price"), jobj.getString("phoneNo"), jobj.getString("location"), jobj.getString("description"), star, jobj.getString("u_id"), jobj.getString("quantity")};
                 Log.e("items array", ""+items);
                 item = new RowItem(items);
-                jobj = new JSONObject(user);
-                String userStar  = new String(productId + "$#$" + jobj.getString("name") + "$#$" + jobj.getString("email") + "$#$" + jobj.getString("phone_no"));
-                Log.e("userStar", userStar);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -112,9 +107,19 @@ public class customHandler extends BroadcastReceiver
             //Bundle containing all fields of the notification
             Bundle bundle = intent.getExtras().getBundle(PBConstants.EVENT_MSG_RECEIVE);
             Log.i(TAG, "User received notification with Message: " + bundle.get("message"));
+            String product = (String) bundle.get("product");
+            String user = (String) bundle.get("user");
+            JSONObject jobj;
+            try {
+                jobj = new JSONObject(product);
+                String productId = jobj.getString("id");
+                jobj = new JSONObject(user);
+                String userStar = new String(productId + "$" + jobj.getString("name") + "$" + jobj.getString("email") + "$" + jobj.getString("phone_no"));
 
-            Log.e("Product", ""+ bundle.get("product"));
-
+                userLocalStore.setproductStars(userStar);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     }

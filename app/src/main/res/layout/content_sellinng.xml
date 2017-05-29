@@ -27,16 +27,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="50dp"
+                android:background="@color/colorPrimary"
                 android:padding="16dp"
-                android:text="click" />
+                android:text="click"
+                android:textColor="@color/text_shadow_white" />
 
             <Button
                 android:id="@+id/pick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorPrimary"
                 android:padding="16dp"
-                android:text="pick" />
+                android:text="pick"
+                android:textColor="@color/text_shadow_white" />
 
             <ImageView
                 android:id="@+id/Imageprev"
@@ -70,61 +75,82 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="invisible"
-            android:weightSum="6.3">
+            android:weightSum="2">
 
             <ImageView
                 android:id="@+id/Image"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2" />
-
-            <EditText
-                android:id="@+id/editTitle"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="2dp"
                 android:layout_weight=".5"
-                android:hint="Title"
-                android:inputType="textCapSentences"/>
+                android:adjustViewBounds="true" />
 
-            <EditText
-                android:id="@+id/editPrice"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight=".5"
-                android:hint="Price"
-                android:inputType="number" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/editQuantity"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".5"
-                android:inputType="number"
-                android:hint="Quantity in Kgs" />
+                <EditText
+                    android:id="@+id/editTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:hint="Title"
+                    android:inputType="textCapSentences" />
 
-            <EditText
-                android:id="@+id/editLocation"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".7"
-                android:hint="Location" />
+                <EditText
+                    android:id="@+id/editPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:hint="Price"
+                    android:inputType="number" />
 
-            <EditText
-                android:id="@+id/editDescription"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".8"
-                android:hint="Description" />
+                <EditText
+                    android:id="@+id/editQuantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Quantity in Kgs"
+                    android:inputType="number" />
 
-            <Button
-                android:id="@+id/btnPostAd"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight=".5"
-                android:text="Post Ad" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:id="@+id/editLocation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".9"
+                        android:hint="Location" />
+
+                    <ImageView
+                        android:id="@+id/ivLocation"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="end"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ic_location" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Description" />
+
+                <Button
+                    android:id="@+id/btnPostAd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/colorPrimary"
+                    android:text="Post Ad"
+                    android:textColor="@color/text_shadow_white" />
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>

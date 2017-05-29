@@ -10,16 +10,14 @@ import com.pushbots.push.Pushbots;
  */
 
 public class MyApplication extends Application {
+    public static UserLocalStore userLocalStore;
 
-    public static boolean openSplash = true;
     @Override
     public void onCreate() {
         super.onCreate();
 //        // Initialize Pushbots Library
         Pushbots.sharedInstance().init(this);
-      /*  if (openSplash) {
-            openSplash = false;
-            startActivity(new Intent(this, SplashScreen.class));
-        }*/
+        userLocalStore = new UserLocalStore(this);
+
     }
 }

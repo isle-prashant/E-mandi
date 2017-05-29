@@ -27,37 +27,77 @@ public class UserRegister extends AppCompatActivity implements View.OnClickListe
     Button bRegister;
     EditText etName, etAge, etEmail, etPassword, etPhone;
     UserLocalStore userLocalStore;
-
+    String name, email, password, phoneNo;
+    int age;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
-        etName= (EditText) findViewById(R.id.etName);
-        etAge= (EditText) findViewById(R.id.etAge);
-        etEmail= (EditText) findViewById(R.id.etEmail);
-        etPassword= (EditText) findViewById(R.id.etPassword);
-        etPhone= (EditText) findViewById(R.id.etPhone);
-        bRegister= (Button) findViewById(R.id.bRegister);
-        userLocalStore= new UserLocalStore(this);
+        etName = (EditText) findViewById(R.id.etName);
+        etAge = (EditText) findViewById(R.id.etAge);
+        etEmail = (EditText) findViewById(R.id.etEmail);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        etPhone = (EditText) findViewById(R.id.etPhone);
+        bRegister = (Button) findViewById(R.id.bRegister);
+        userLocalStore = new UserLocalStore(this);
         bRegister.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.bRegister:
 
-                String name= etName.getText().toString();
-                String email= etEmail.getText().toString();
-                String password= etPassword.getText().toString();
-                int age= Integer.parseInt(etAge.getText().toString());
-                String phoneNo = etPhone.getText().toString();
-                new AsyncClass().execute("http://"+ip+"/reg_user.php",name,email,password,String.valueOf(age),phoneNo);
+                intialize();
+                if (validate()) {
+                    new AsyncClass().execute("http://" + ip + "/reg_user.php", name, email, password, String.valueOf(age), phoneNo);
+                }
                 break;
         }
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+        if (name.isEmpty() || name.length() > 20) {
+            etName.setError("please enter a valid Name");
+            valid = false;
+        }
+        if (age <= 0 || age > 90) {
+            etAge.setError("please enter valid age");
+            valid = false;
+        }
+        String y = email;
+        int atpos = y.indexOf("@");
+        int dotpos = y.lastIndexOf(".");
+        if ((atpos < 1) || (dotpos < atpos + 2) || (dotpos + 2 >= y.length())) {
+            etEmail.setError("please enter a valid email");
+            valid = false;
+        }
+        if (password.isEmpty() || password.length() < 4) {
+            etPassword.setError("please enter a valid password");
+            valid = false;
+        }
+        if (phoneNo.length() != 10) {
+            etPhone.setError("please anter a valid phone no.");
+            valid = false;
+        }
+        return valid;
+    }
+
+    public void intialize() {
+        name = etName.getText().toString().trim();
+        email = etEmail.getText().toString().trim();
+        password = etPassword.getText().toString().trim();
+        phoneNo = etPhone.getText().toString().trim();
+        if (etAge.getText().toString().length() != 0) {
+            age = Integer.parseInt(etAge.getText().toString().trim());
+        } else {
+            age = 0;
+        }
+
     }
 
     private class AsyncClass extends AsyncTask<String, Void, Void> {
@@ -66,6 +106,7 @@ public class UserRegister extends AppCompatActivity implements View.OnClickListe
         JSONObject jobj;
         String userId;
         String ServerResponse;
+
         @Override
         protected Void doInBackground(String... strings) {
             Response response = null;
@@ -85,7 +126,7 @@ public class UserRegister extends AppCompatActivity implements View.OnClickListe
             try {
                 response = client.newCall(request).execute();
                 Log.e("Address", strings[0]);
-                if (!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     resCode = 201;
                     throw new IOException("Unexpected code " + response);
                 }
@@ -95,7 +136,7 @@ public class UserRegister extends AppCompatActivity implements View.OnClickListe
                 for (int i = 0; i < arr.length(); i++) {
                     jobj = arr.getJSONObject(i);
                     ServerResponse = jobj.getString("response");
-                    if (jobj.getString("response").equals("successful")){
+                    if (jobj.getString("response").equals("successful")) {
                         resCode = 200;
                     }
                 }
@@ -110,7 +151,7 @@ public class UserRegister extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(UserRegister.this, ServerResponse,Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserRegister.this, ServerResponse, Toast.LENGTH_SHORT).show();
             if (resCode == 200) {
                 UserRegister.this.finish();
             }

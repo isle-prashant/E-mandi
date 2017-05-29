@@ -25,7 +25,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -40,6 +42,7 @@ import static com.twosquares.e_mandi.DashboardActivity.swipeRefreshLayoutDashboa
 import static com.twosquares.e_mandi.MainActivity.rowItems;
 import static com.twosquares.e_mandi.MainActivity.swipeRefreshLayout;
 import static com.twosquares.e_mandi.MainActivity.user;
+import static com.twosquares.e_mandi.MyApplication.userLocalStore;
 import static com.twosquares.e_mandi.SellingActivity.initialLayout;
 import static com.twosquares.e_mandi.SellingActivity.laterLayout;
 import static com.twosquares.e_mandi.User.stars;
@@ -49,21 +52,21 @@ import static com.twosquares.e_mandi.User.stars;
  */
 
 public class AsyncClass extends AsyncTask<String, Void, Void> {
+    private final OkHttpClient client = new OkHttpClient();
+    public RowItem item;
     RecyclerView mRecyclerView = MainActivity.mRecyclerView;
     List<RowItem> rowItems = MainActivity.rowItems;
     Context context;
     String action;
-    public RowItem item;
     ProgressDialog dialog;
     int resCode = 0;
     String deletedId;
+
+
     AsyncClass(Context context, String action) {
         this.context = context;
         this.action = action;
     }
-
-
-    private final OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onPreExecute() {
@@ -72,7 +75,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             rowItems.clear();
             swipeRefreshLayout.setRefreshing(true);
         }
-        if (action == "UploadData") {
+        if (action == "UploadData" || action == "EditPost") {
 
             dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
             dialog.setMessage("Posting Your Ad. \nHang in There");
@@ -127,6 +130,8 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
         }
         if (action == "UploadData"){
             Response response = null;
@@ -137,7 +142,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                     .add("description", strings[4])
                     .add("phoneNo", strings[5])
                     .add("title", strings[6])
-                    .add("userId", user.userId)
+                    .add("userId", User.userId)
                     .add("quantity", strings[7])
                     .build();
 
@@ -211,7 +216,39 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 } else {
                     resCode = 200;
                     System.out.println(response.body().string());
-                    deletedId = strings[2];
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        if (action == "EditPost") {
+            Log.e("Address", strings[0]);
+            Response response = null;
+            RequestBody requestBody = new FormBody.Builder()
+                    .add("price", strings[1])
+                    .add("location", strings[2])
+                    .add("description", strings[3])
+                    .add("title", strings[4])
+                    .add("quantity", strings[5])
+                    .add("id", strings[6])
+                    .build();
+
+
+            Request request = new Request.Builder()
+                    .url(strings[0])
+                    .post(requestBody)
+                    .build();
+
+            try {
+                response = client.newCall(request).execute();
+                if (!response.isSuccessful()) {
+                    resCode = 201;
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    resCode = 200;
+                    System.out.println(response.body().string());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -259,7 +296,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
         }
         if (action == "DashboardViewLoader"){
             for (int i = 0; i < rowItems.size(); i ++){
-                if (rowItems.get(i).getOwner_id().equals(user.userId)){
+                if (rowItems.get(i).getOwner_id().equals(User.userId)) {
                     rowItemList.add(rowItems.get(i));
                 }
             }
@@ -268,13 +305,13 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             customAdapter2.notifyDataSetChanged();
             swipeRefreshLayoutDashboard.setRefreshing(false);
         }
-        if (action == "UploadData"){
+        if (action == "UploadData") {
             if (dialog != null)
                 dialog.dismiss();
             if (resCode == 200) {
                 Intent i = new Intent(context,MainActivity.class);
                 ((Activity) context).finish();
-                ((Activity) context).startActivity(i);
+                context.startActivity(i);
 
             }
             else {
@@ -283,15 +320,20 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 laterLayout.setVisibility(View.GONE);
             }
         }
+        if (action == "EditPost") {
+            if (dialog != null)
+                dialog.dismiss();
+            if (resCode == 200) {
+                Intent i = new Intent(context, DashboardActivity.class);
+                ((Activity) context).finish();
+                context.startActivity(i);
+            }
+        }
         if (action == "DeletePost"){
             if (dialog != null)
                 dialog.dismiss();
             if (resCode == 200) {
                 ((Activity) context).finish();
-                rowItemList.remove(rowItemList.get(Integer.parseInt(deletedId)));
-                RecyclerView.Adapter customAdapter2 = new CustomAdapter2(context, rowItemList);
-                mRecyclerViewDashboard.setAdapter(customAdapter2);
-                customAdapter2.notifyDataSetChanged();
             }
         }
     }

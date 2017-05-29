@@ -31,15 +31,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
-    ListView lv;
     public static String ip;
-    public RowItem item;
     public static RecyclerView mRecyclerView;
     public static List <RowItem> rowItems;
-    private RecyclerView.LayoutManager mLayoutManager;
     public static SwipeRefreshLayout swipeRefreshLayout;
-    UserLocalStore userLocalStore;
+    public static boolean openSplash = true;
     public static User user;
+    public RowItem item;
+    ListView lv;
+    UserLocalStore userLocalStore;
+    private RecyclerView.LayoutManager mLayoutManager;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         Fragment fragment;
@@ -68,9 +69,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//       initializing pushbots
-        initPushbots();
-
+//       splash screen definition
+        if (openSplash) {
+            openSplash = false;
+            startActivity(new Intent(this, SplashScreen.class));
+        }
 //      logged in user data from shared preference
         userLocalStore= new UserLocalStore(this);
         if (authenticate()==true){
@@ -79,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         else {
             startActivity(new Intent(this, UserLogin.class));
         }
+
+        initPushbots();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -115,8 +120,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private void initPushbots(){
         Pushbots.sharedInstance().registerForRemoteNotifications();
         Pushbots.sharedInstance().setCustomHandler(customHandler.class);
-        //set alias to test
-        Pushbots.sharedInstance().setAlias("username");
+
     }
     @Override
     protected void onStart() {
@@ -145,12 +149,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
-            user = null;
+
+            Log.e("user", String.valueOf(User.age));
+            Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+            startActivity(intent);
+           /* user = null;
             rowItems.clear();
             User.stars.clear();
             userLocalStore.clearUserData();
             userLocalStore.setUserLoggedIn(false);
-            startActivity(new Intent(this, UserLogin.class));
+            startActivity(new Intent(this, UserLogin.class));*/
         }
 
         return super.onOptionsItemSelected(item);

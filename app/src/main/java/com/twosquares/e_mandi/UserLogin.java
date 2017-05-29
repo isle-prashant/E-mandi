@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pushbots.push.Pushbots;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +27,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.twosquares.e_mandi.MainActivity.ip;
+import static com.twosquares.e_mandi.MainActivity.user;
 import static com.twosquares.e_mandi.User.stars;
 
 public class UserLogin extends AppCompatActivity implements View.OnClickListener {
@@ -127,6 +130,7 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
                 User registerData = new User(name, age, email, password, phoneNo, userId,new ArrayList<String>());
                 userLocalStore.storeUserData(registerData);
                 userLocalStore.setUserLoggedIn(true);
+                Pushbots.sharedInstance().setAlias(User.userId);
                 com.twosquares.e_mandi.AsyncClass asyncClass = new com.twosquares.e_mandi.AsyncClass(UserLogin.this, "ViewLoader");
                 asyncClass.execute("http://"+ip+"/index.json");
                 finish();

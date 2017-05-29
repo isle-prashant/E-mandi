@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.twosquares.e_mandi.UserListActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/item_list3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbarSize="@null"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/noUserMsg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Yet to be noticed by someone"
+        android:visibility="invisible" />
+
+</android.support.design.widget.CoordinatorLayout>

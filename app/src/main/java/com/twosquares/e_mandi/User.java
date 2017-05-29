@@ -10,44 +10,45 @@ public class User {
     public static String name, email, password, phoneNo, userId;
     public static int age;
     public static ArrayList<String> stars = new ArrayList<String>();
+    public static ArrayList<String> productStars = new ArrayList<String>();
 
   public User(String name, int age, String email, String password, String phoneNo, String userId){
-      this.name = name;
-      this.age= age;
-      this.email = email;
-      this.password = password;
-      this.phoneNo = phoneNo;
-      this.userId = userId;
+      User.name = name;
+      User.age = age;
+      User.email = email;
+      User.password = password;
+      User.phoneNo = phoneNo;
+      User.userId = userId;
 
 
     }
 
     public User(String name, int age, String email, String password, String phoneNo, String userId, ArrayList<String> listStar){
-        this.name = name;
-        this.age= age;
-        this.email = email;
-        this.password = password;
-        this.phoneNo = phoneNo;
-        this.userId = userId;
-        this.stars = listStar;
+        User.name = name;
+        User.age = age;
+        User.email = email;
+        User.password = password;
+        User.phoneNo = phoneNo;
+        User.userId = userId;
+        stars = listStar;
     }
 
     public User(String[] user) {
-        this.name = user[0];
-        this.age= Integer.parseInt(user[1]);
-        this.email = user[2];
-        this.password = user[3];
-        this.phoneNo = user[4];
-        this.userId = user[5];
+        name = user[0];
+        age = Integer.parseInt(user[1]);
+        email = user[2];
+        password = user[3];
+        phoneNo = user[4];
+        userId = user[5];
     }
 
     public void removeUser (){
-        this.name = "";
-        this.age= -1;
-        this.email = "";
-        this.password = "";
-        this.phoneNo = "";
-        this.userId = "";
-        this.stars = new ArrayList<String>();
+        name = "";
+        age = -1;
+        email = "";
+        password = "";
+        phoneNo = "";
+        userId = "";
+        stars = new ArrayList<String>();
     }
 }

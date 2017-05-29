@@ -57,19 +57,19 @@ import static com.twosquares.e_mandi.MainActivity.user;
 
 public class SellingActivity extends AppCompatActivity {
 
+    public static LinearLayout initialLayout, laterLayout;
+    public static String image_id = null;
+    static String encodedImage;
+    static String filePath;
+    static Bitmap bitmap;
+    public EditText priceTxt, descTxt, locationTxt, quantityTxt, titleTxt;
     Button btpic, btnup, btPostAd;
     ImageView imPreview, imageView;
     int img = 0;
     Uri m;
-    static String encodedImage;
-    static String filePath;
-    public static String ip;
-    public EditText priceTxt, descTxt, locationTxt, quantityTxt, titleTxt;
-    public static LinearLayout initialLayout, laterLayout;
-    public static String image_id = null;
+    String ip;
     int PLACE_REQUEST = 2;
-
-
+    String price, location, Description, contact, Title, quantity;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         Fragment fragment;
@@ -95,6 +95,7 @@ public class SellingActivity extends AppCompatActivity {
         }
 
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,13 +115,14 @@ public class SellingActivity extends AppCompatActivity {
         descTxt = (EditText) findViewById(R.id.editDescription);
         locationTxt = (EditText) findViewById(R.id.editLocation);
         quantityTxt = (EditText) findViewById(R.id.editQuantity);
-        locationTxt.setOnClickListener(new View.OnClickListener() {
+        ImageView ivLocation = (ImageView) findViewById(R.id.ivLocation);
+        ivLocation.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 Intent intent;
                 try {
-                    intent = builder.build(getApplicationContext());
+                    intent = builder.build(SellingActivity.this);
                     startActivityForResult(intent, PLACE_REQUEST);
 
 
@@ -131,6 +133,7 @@ public class SellingActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         titleTxt = (EditText) findViewById(R.id.editTitle);
         btpic.setOnClickListener(new View.OnClickListener() {
@@ -151,15 +154,12 @@ public class SellingActivity extends AppCompatActivity {
         btPostAd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String price = String.valueOf(priceTxt.getText());
-                String location = String.valueOf(locationTxt.getText());
-                String Description = String.valueOf(descTxt.getText());
-                String contact = user.phoneNo;
-                String Title = String.valueOf(titleTxt.getText());
-                String quantity = String.valueOf(quantityTxt.getText());
-                AsyncClass asyncClass = new AsyncClass(SellingActivity.this, "UploadData");
-                asyncClass.execute("http://" + ip + "/image.php",encodedImage,price, location, Description, contact, Title, quantity);
-
+                intialize();
+                if (validate()) {
+                    contact = User.phoneNo;
+                    AsyncClass asyncClass = new AsyncClass(SellingActivity.this, "UploadData");
+                    asyncClass.execute("http://" + ip + "/image.php", encodedImage, price, location, Description, contact, Title, quantity);
+                }
             }
         });
 
@@ -167,7 +167,6 @@ public class SellingActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_notifications);
     }
-
 
     public String getPath(Uri uri) {
         String[] projection = {MediaStore.MediaColumns.DATA};
@@ -180,12 +179,10 @@ public class SellingActivity extends AppCompatActivity {
         return cursor.getString(column_index);
     }
 
-
     public File createTemporaryFile() throws Exception {
         File tempFile = new File(getExternalFilesDir(null), "picture.jpg");
         return tempFile;
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -225,8 +222,6 @@ public class SellingActivity extends AppCompatActivity {
             }
         }
     }
-
-    static Bitmap bitmap;
 
     public void grabimage(Uri uri, ImageView imageView) {
         if (uri != null) {
@@ -296,6 +291,41 @@ public class SellingActivity extends AppCompatActivity {
             file.delete();
         }
         photo.delete();
+    }
+
+
+    public boolean validate() {
+        boolean valid = true;
+        if (Title.isEmpty() || Title.length() > 20) {
+            titleTxt.setError("please enter valid title");
+            valid = false;
+        }
+        if (price.isEmpty() || price.length() > 10) {
+            priceTxt.setError("please enter valid price");
+            valid = false;
+        }
+        if (Description.isEmpty() || Description.length() > 140) {
+            descTxt.setError("please enter description");
+            valid = false;
+        }
+        if (quantity.isEmpty() || quantity.length() > 4) {
+            descTxt.setError("please enter a valid quantity");
+            valid = false;
+        }
+        if (location.isEmpty() || location.length() > 200) {
+            locationTxt.setError("please chose your location");
+            valid = false;
+        }
+        return valid;
+    }
+
+    public void intialize() {
+        Title = titleTxt.getText().toString().trim();
+        price = priceTxt.getText().toString().trim();
+        location = locationTxt.getText().toString().trim();
+        Description = descTxt.getText().toString().trim();
+        quantity = String.valueOf(quantityTxt.getText());
+
     }
 
 

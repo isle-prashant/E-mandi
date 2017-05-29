@@ -25,8 +25,8 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
 
     public static SwipeRefreshLayout swipeRefreshLayoutDashboard;
     public static RecyclerView mRecyclerViewDashboard;
-    private RecyclerView.LayoutManager mLayoutManager;
     public static List<RowItem> rowItemList;
+    private RecyclerView.LayoutManager mLayoutManager;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         Fragment fragment;
@@ -72,7 +72,7 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
         mRecyclerViewDashboard.setLayoutManager(mLayoutManager);
         mRecyclerViewDashboard.setScrollBarSize(0);
         for (int i = 0; i < rowItems.size(); i ++){
-            if (rowItems.get(i).getOwner_id().equals(user.userId)){
+            if (rowItems.get(i).getOwner_id().equals(User.userId)) {
                 rowItemList.add(rowItems.get(i));
             }
         }
@@ -89,5 +89,10 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
     public void onRefresh() {
         AsyncClass asyncClass = new AsyncClass(DashboardActivity.this, "DashboardViewLoader");
         asyncClass.execute("http://"+ip+"/index.json");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }
