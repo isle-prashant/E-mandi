@@ -1,4 +1,4 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.views;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pushbots.push.Pushbots;
+import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.utils.UserLocalStore;
+import com.twosquares.e_mandi.datamodels.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,9 +29,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.twosquares.e_mandi.MainActivity.ip;
-import static com.twosquares.e_mandi.MainActivity.user;
-import static com.twosquares.e_mandi.User.stars;
+import static com.twosquares.e_mandi.views.MainActivity.ip;
+import static com.twosquares.e_mandi.datamodels.User.stars;
 
 public class UserLogin extends AppCompatActivity implements View.OnClickListener {
 
@@ -131,7 +133,7 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
                 userLocalStore.storeUserData(registerData);
                 userLocalStore.setUserLoggedIn(true);
                 Pushbots.sharedInstance().setAlias(User.userId);
-                com.twosquares.e_mandi.AsyncClass asyncClass = new com.twosquares.e_mandi.AsyncClass(UserLogin.this, "ViewLoader");
+                com.twosquares.e_mandi.utils.AsyncClass asyncClass = new com.twosquares.e_mandi.utils.AsyncClass(UserLogin.this, "ViewLoader");
                 asyncClass.execute("http://"+ip+"/index.json");
                 finish();
             }

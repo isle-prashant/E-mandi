@@ -1,6 +1,7 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.datamodels;
 
 import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by PRASHANT on 16-11-2016.
@@ -8,15 +9,15 @@ import java.io.Serializable;
 
 public class RowItem implements Serializable {
 
-    private String title;
-    private String image_id;
-    private String price;
-    private String contact;
-    private String location;
-    private String description;
+    @SerializedName("title") private String title;
+    @SerializedName("image_id") private String image_id;
+    @SerializedName("price") private String price;
+    @SerializedName("phoneNo") private String contact;
+    @SerializedName("location") private String location;
+    @SerializedName("description") private String description;
     private Boolean important;
-    private String owner_id;
-    private String quantity;
+    @SerializedName("ownerId") private String owner_id;
+    @SerializedName("quantity") private String quantity;
 
     public RowItem(String items[]){
         this.title = items[0];

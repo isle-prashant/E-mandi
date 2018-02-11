@@ -1,4 +1,4 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +10,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.squareup.picasso.Picasso;
+import com.twosquares.e_mandi.utils.AsyncClass;
+import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.datamodels.RowItem;
+import com.twosquares.e_mandi.datamodels.User;
 
-import static com.twosquares.e_mandi.MainActivity.user;
-import static com.twosquares.e_mandi.MainActivity.ip;
+import static com.twosquares.e_mandi.views.MainActivity.ip;
 
 /**
  * Created by PRASHANT on 28-05-2017.

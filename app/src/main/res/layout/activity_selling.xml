@@ -5,7 +5,7 @@
     android:id="@+id/activity_selling"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.twosquares.e_mandi.SellingActivity">
+    tools:context="com.twosquares.e_mandi.views.SellingActivity">
 
 
     <include layout="@layout/content_sellinng" />

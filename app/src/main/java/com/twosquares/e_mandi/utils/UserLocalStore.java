@@ -1,9 +1,12 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.twosquares.e_mandi.datamodels.User;
+import com.twosquares.e_mandi.utils.AsyncClass;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +14,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.twosquares.e_mandi.MainActivity.ip;
-import static com.twosquares.e_mandi.MainActivity.user;
-import static com.twosquares.e_mandi.User.stars;
+import static com.twosquares.e_mandi.views.MainActivity.ip;
+import static com.twosquares.e_mandi.datamodels.User.stars;
 
 /**
  * Created by PRAKARAN on 13-05-2017.

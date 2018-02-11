@@ -1,6 +1,5 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.adapters;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
@@ -11,31 +10,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.twosquares.e_mandi.views.ProductDetails;
+import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.utils.UserLocalStore;
+import com.twosquares.e_mandi.datamodels.RowItem;
 
 import java.util.List;
-import java.util.Random;
 
-import static com.twosquares.e_mandi.MainActivity.ip;
-import static com.twosquares.e_mandi.MainActivity.rowItems;
-import static com.twosquares.e_mandi.MainActivity.user;
+import static com.twosquares.e_mandi.views.MainActivity.ip;
+import static com.twosquares.e_mandi.views.MainActivity.rowItems;
+import static com.twosquares.e_mandi.views.MainActivity.user;
 
 /**
  * Created by PRASHANT on 15-11-2016.
  */
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     Context context;
     List<RowItem> rowItem;
     int lastPosition = -1;
 
-    public CustomAdapter(Context context, List objects) {
+    public HomeAdapter(Context context, List objects) {
         this.context = context;
         rowItem = objects;
     }
@@ -73,14 +73,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 Item.setImportant(!Item.isImportant());
                 userLocalStore.setStar(Item.getImage_id(),Item.getImage_id(),Item.getOwner_id());
                 rowItem.set(getAdapterPosition(), Item);
-                CustomAdapter.this.notifyDataSetChanged();
+                HomeAdapter.this.notifyDataSetChanged();
 
             }
             else{
                 Intent intent = new Intent(mContext, ProductDetails.class);
                 Log.e("position", "" + getAdapterPosition());
                 intent.putExtra("rowItem", rowItem.get(getAdapterPosition()));
-                intent.putExtra("Adapter","CustomAdapter");
+                intent.putExtra("Adapter","HomeAdapter");
                 System.out.println("selected row " + rowItem.get(getAdapterPosition()).getImage_id());
                 mContext.startActivity(intent);
             }
@@ -88,16 +88,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
 
-    /*@NonNull
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        convertView = inflater.inflate(R.layout.list_item,null);
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.imgThumbnail);
-        TextView tv = (TextView) convertView.findViewById(R.id.txt);
-        Picasso.with(context).load("http://i.imgur.com/" + rowItem.get(position) + "s.jpg").into(imageView);
-        return convertView;
-    }*/
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

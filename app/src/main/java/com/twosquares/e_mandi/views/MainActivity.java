@@ -1,4 +1,4 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.views;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,10 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +17,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.pushbots.push.Pushbots;
-
-import org.json.JSONObject;
+import com.twosquares.e_mandi.utils.AsyncClass;
+import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.utils.UserLocalStore;
+import com.twosquares.e_mandi.utils.customHandler;
+import com.twosquares.e_mandi.datamodels.RowItem;
+import com.twosquares.e_mandi.datamodels.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,20 +92,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         rowItems =  new ArrayList<RowItem>();
         rowItems.clear();
         isStoragePermissionGranted();
-//        lv = (ListView) findViewById(R.id.item_list);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView = (RecyclerView) findViewById(R.id.item_list);
-/*        SlideInUpAnimator animator = new SlideInUpAnimator(new OvershootInterpolator(1f));
-        mRecyclerView.setItemAnimator(animator);*/
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
-        /*mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,
-                StaggeredGridLayoutManager.HORIZONTAL));*/
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setScrollBarSize(0);
 
