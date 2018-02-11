@@ -24,7 +24,7 @@ import com.twosquares.e_mandi.datamodels.User;
 import static com.twosquares.e_mandi.views.MainActivity.ip;
 
 /**
- * Created by PRASHANT on 28-05-2017.
+ * Created by Prashant Kumar on 28-05-2017.
  */
 
 public class EditActivity extends AppCompatActivity {

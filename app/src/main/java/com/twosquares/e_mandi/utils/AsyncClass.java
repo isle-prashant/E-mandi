@@ -44,7 +44,7 @@ import static com.twosquares.e_mandi.views.SellingActivity.laterLayout;
 import static com.twosquares.e_mandi.datamodels.User.stars;
 
 /**
- * Created by PRASHANT on 27-04-2017.
+ * Created by Prashant Kumar on 27-04-2017.
  */
 
 public class AsyncClass extends AsyncTask<String, Void, Void> {
@@ -127,7 +127,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
 
 
         }
-        if (action == "UploadData"){
+        /*if (action == "UploadData"){
             Response response = null;
             RequestBody requestBody = new FormBody.Builder()
                     .add("image", strings[1])
@@ -159,7 +159,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 e.printStackTrace();
             }
             return null;
-        }
+        }*/
         if (action == "Star"){
             Response response = null;
             RequestBody requestBody = new FormBody.Builder()
@@ -263,10 +263,10 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             fadeIn.setDuration(400);
             fadeIn.setFillAfter(true);
             set.addAnimation(fadeIn);
-            RecyclerView.Adapter customAdapter = new HomeAdapter(context, rowItems);
+            RecyclerView.Adapter homeAdapter = new HomeAdapter(context, rowItems);
 
-            MainActivity.mRecyclerView.setAdapter(customAdapter);
-            customAdapter.notifyDataSetChanged();
+            MainActivity.mRecyclerView.setAdapter(homeAdapter);
+            homeAdapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
 
         /*    mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
@@ -293,9 +293,9 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                     rowItemList.add(rowItems.get(i));
                 }
             }
-            RecyclerView.Adapter customAdapter2 = new DashboardAdapter(context, rowItemList);
-            mRecyclerViewDashboard.setAdapter(customAdapter2);
-            customAdapter2.notifyDataSetChanged();
+            RecyclerView.Adapter dashboardAdapter = new DashboardAdapter(context, rowItemList);
+            mRecyclerViewDashboard.setAdapter(dashboardAdapter);
+            dashboardAdapter.notifyDataSetChanged();
             swipeRefreshLayoutDashboard.setRefreshing(false);
         }
         if (action == "UploadData") {

@@ -27,7 +27,7 @@ import static com.twosquares.e_mandi.views.MainActivity.rowItems;
 import static com.twosquares.e_mandi.views.MainActivity.user;
 
 /**
- * Created by PRASHANT on 15-11-2016.
+ * Created by Prashant Kumar on 15-11-2016.
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {

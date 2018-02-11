@@ -1,10 +1,14 @@
 package com.twosquares.e_mandi.views;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,6 +31,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.twosquares.e_mandi.RequestBuilder;
 import com.twosquares.e_mandi.utils.AsyncClass;
 import com.twosquares.e_mandi.R;
 import com.twosquares.e_mandi.datamodels.User;
@@ -35,6 +40,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class SellingActivity extends AppCompatActivity {
 
@@ -138,8 +148,20 @@ public class SellingActivity extends AppCompatActivity {
                 intialize();
                 if (validate()) {
                     contact = User.phoneNo;
-                    AsyncClass asyncClass = new AsyncClass(SellingActivity.this, "UploadData");
-                    asyncClass.execute("http://" + ip + "/image.php", encodedImage, price, location, Description, contact, Title, quantity);
+                    RequestBuilder requestBuilder = new RequestBuilder();
+                    HashMap<String,String> params = new HashMap<>();
+                    params.put("image",encodedImage);
+                    params.put("price",price);
+                    params.put("location", location);
+                    params.put("description", Description);
+                    params.put("phoneNo",contact);
+                    params.put("title", Title);
+                    params.put("userId", User.userId);
+                    params.put("quantity", quantity);
+                    Request request = requestBuilder.createPostRequest("http://" + ip + "/image.php", params);
+                    new UploadAsync(SellingActivity.this).execute(request);
+//                    AsyncClass asyncClass = new AsyncClass(SellingActivity.this, "UploadData");
+//                    asyncClass.execute("http://" + ip + "/image.php", encodedImage, price, location, Description, contact, Title, quantity);
                 }
             }
         });
@@ -182,15 +204,6 @@ public class SellingActivity extends AppCompatActivity {
 
                 filePath = getPath(selectedImage);
                 grabimage(selectedImage, imPreview);
-               /* String file_extn = filePath.substring(filePath.lastIndexOf(".") + 1);
-                System.out.println(selectedImage);
-                if (file_extn.equals("img") || file_extn.equals("jpg") || file_extn.equals("jpeg") || file_extn.equals("gif") || file_extn.equals("png")) {
-                    //FINE
-                    grabimage(selectedImage, imPreview);
-                } else {
-                    //NOT IN REQUIRED FORMAT
-                    Toast.makeText(this, "Cannot Open the file", Toast.LENGTH_SHORT).show();
-                }*/
             }
         }
 
@@ -223,17 +236,8 @@ public class SellingActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-           /* btpic.setEnabled(false);
-            btnup.setEnabled(false);
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.imageUploadProgress);
-            TextView progressText = (TextView) findViewById(R.id.imageUploadText);
-            progressBar.setVisibility(View.VISIBLE);
-            progressText.setVisibility(View.VISIBLE);*/
             initialLayout.setVisibility(View.GONE);
             laterLayout.setVisibility(View.VISIBLE);
-           /* new UploadImage().execute("https://api.imgur.com/3/image");
-            System.out.println("calling");*/
 
         } else
             Toast.makeText(this, "Something went Wrong. Please try Again", Toast.LENGTH_SHORT).show();
@@ -309,6 +313,52 @@ public class SellingActivity extends AppCompatActivity {
 
     }
 
+    class UploadAsync extends AsyncTask<Request, Void, Void>{
+        int resCode = 0;
+        private final OkHttpClient client = new OkHttpClient();
+        ProgressDialog dialog;
+        Context context;
+        public UploadAsync(Context context) {
+            this.context = context;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+            dialog.setMessage("Posting Your Ad. \nHang in There");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
 
+        @Override
+        protected Void doInBackground(Request... requests) {
+            Response response = null;
+            try {
+                response = client.newCall(requests[0]).execute();
+                if (!response.isSuccessful()) {
+                    resCode = 201;
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    resCode = 200;
+                    System.out.println(response.body().string());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (dialog != null)
+                dialog.dismiss();
+            if (resCode == 200) {
+                Intent i = new Intent(context,MainActivity.class);
+                ((Activity) context).finish();
+                context.startActivity(i);
+
+            }
+        }
+    }
 }

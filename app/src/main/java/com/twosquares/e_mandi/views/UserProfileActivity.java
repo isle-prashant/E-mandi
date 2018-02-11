@@ -16,7 +16,7 @@ import static com.twosquares.e_mandi.views.MainActivity.user;
 import static com.twosquares.e_mandi.MyApplication.userLocalStore;
 
 /**
- * Created by PRASHANT on 28-05-2017.
+ * Created by Prashant Kumar on 28-05-2017.
  */
 
 public class UserProfileActivity extends AppCompatActivity {

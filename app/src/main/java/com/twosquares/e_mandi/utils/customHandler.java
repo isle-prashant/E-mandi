@@ -1,7 +1,7 @@
 package com.twosquares.e_mandi.utils;
 
 /**
- * Created by prkumar on 5/17/2017.
+ * Created by Prashant Kumar on 5/17/2017.
  */
 
 import android.content.BroadcastReceiver;
@@ -13,21 +13,18 @@ import android.util.Log;
 import com.pushbots.push.Pushbots;
 import com.pushbots.push.utils.PBConstants;
 import com.twosquares.e_mandi.datamodels.RowItem;
-import com.twosquares.e_mandi.utils.UserLocalStore;
 import com.twosquares.e_mandi.views.ProductDetails;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class customHandler extends BroadcastReceiver
-{
+public class customHandler extends BroadcastReceiver {
     public RowItem item;
     private String TAG = "PB3";
 
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         UserLocalStore userLocalStore = new UserLocalStore(context);
 
         String action = intent.getAction();
@@ -49,8 +46,8 @@ public class customHandler extends BroadcastReceiver
             JSONObject jobj;
             try {
                 jobj = new JSONObject(product);
-                String items[]  = new String[]{jobj.getString("title"), jobj.getString("id"), jobj.getString("price"), jobj.getString("phoneNo"), jobj.getString("location"), jobj.getString("description"), star, jobj.getString("u_id"), jobj.getString("quantity")};
-                Log.e("items array", ""+items);
+                String items[] = new String[]{jobj.getString("title"), jobj.getString("id"), jobj.getString("price"), jobj.getString("phoneNo"), jobj.getString("location"), jobj.getString("description"), star, jobj.getString("u_id"), jobj.getString("quantity")};
+                Log.e("items array", "" + items);
                 item = new RowItem(items);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -62,7 +59,7 @@ public class customHandler extends BroadcastReceiver
             context.startActivity(i);
 
 
-        }else if(action.equals(PBConstants.EVENT_MSG_RECEIVE)){
+        } else if (action.equals(PBConstants.EVENT_MSG_RECEIVE)) {
 
             //Bundle containing all fields of the notification
             Bundle bundle = intent.getExtras().getBundle(PBConstants.EVENT_MSG_RECEIVE);

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by PRASHANT on 16-11-2016.
+ * Created by Prashant Kumar on 16-11-2016.
  */
 
 public class RowItem implements Serializable {

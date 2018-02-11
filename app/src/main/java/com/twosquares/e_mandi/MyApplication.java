@@ -6,7 +6,7 @@ import com.pushbots.push.Pushbots;
 import com.twosquares.e_mandi.utils.UserLocalStore;
 
 /**
- * Created by prkumar on 5/16/2017.
+ * Created by Prashant Kumar on 5/16/2017.
  */
 
 public class MyApplication extends Application {

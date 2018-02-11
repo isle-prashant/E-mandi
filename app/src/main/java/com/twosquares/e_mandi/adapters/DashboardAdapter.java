@@ -21,7 +21,7 @@ import java.util.List;
 import static com.twosquares.e_mandi.views.MainActivity.ip;
 
 /**
- * Created by PRASHANT on 22-05-2017.
+ * Created by Prashant Kumar on 22-05-2017.
  */
 
 public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.ViewHolder> {

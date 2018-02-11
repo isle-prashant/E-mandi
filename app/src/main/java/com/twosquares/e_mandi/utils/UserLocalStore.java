@@ -18,7 +18,7 @@ import static com.twosquares.e_mandi.views.MainActivity.ip;
 import static com.twosquares.e_mandi.datamodels.User.stars;
 
 /**
- * Created by PRAKARAN on 13-05-2017.
+ * Created by Prashant Kumar on 13-05-2017.
  */
 
 public class UserLocalStore {

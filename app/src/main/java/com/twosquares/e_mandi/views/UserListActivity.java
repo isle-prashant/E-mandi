@@ -8,27 +8,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.twosquares.e_mandi.R;
-import com.twosquares.e_mandi.adapters.CustomAdapter3;
+import com.twosquares.e_mandi.adapters.UsersAdapter;
 
 import static com.twosquares.e_mandi.views.ProductDetails.markedProducts;
 
 /**
- * Created by PRASHANT on 27-05-2017.
+ * Created by Prashant Kumar on 27-05-2017.
  */
 
 public class UserListActivity extends AppCompatActivity {
-    RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
-        mRecyclerView = (RecyclerView) findViewById(R.id.item_list3);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.item_list3);
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         /*mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.HORIZONTAL));*/
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -37,8 +36,8 @@ public class UserListActivity extends AppCompatActivity {
         if (markedProducts.get(productId) == null) {
             findViewById(R.id.noUserMsg).setVisibility(View.VISIBLE);
         }
-        RecyclerView.Adapter customAdapter = new CustomAdapter3(this, markedProducts.get(productId));
-        mRecyclerView.setAdapter(customAdapter);
-        customAdapter.notifyDataSetChanged();
+        RecyclerView.Adapter usersAdapter = new UsersAdapter(this, markedProducts.get(productId));
+        mRecyclerView.setAdapter(usersAdapter);
+        usersAdapter.notifyDataSetChanged();
     }
 }

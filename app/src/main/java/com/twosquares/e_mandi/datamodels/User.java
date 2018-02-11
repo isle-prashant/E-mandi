@@ -3,7 +3,7 @@ package com.twosquares.e_mandi.datamodels;
 import java.util.ArrayList;
 
 /**
- * Created by PRAKARAN on 13-05-2017.
+ * Created by Prashant Kumar on 13-05-2017.
  */
 
 public class User {
