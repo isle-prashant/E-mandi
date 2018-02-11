@@ -1,4 +1,4 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.views;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,11 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
-import static com.twosquares.e_mandi.MainActivity.rowItems;
-import static com.twosquares.e_mandi.MainActivity.user;
-import static com.twosquares.e_mandi.ProductDetails.markedProducts;
+import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.adapters.CustomAdapter3;
+
+import static com.twosquares.e_mandi.views.ProductDetails.markedProducts;
 
 /**
  * Created by PRASHANT on 27-05-2017.

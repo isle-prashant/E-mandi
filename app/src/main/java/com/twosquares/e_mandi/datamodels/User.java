@@ -1,4 +1,4 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.datamodels;
 
 import java.util.ArrayList;
 
@@ -12,18 +12,18 @@ public class User {
     public static ArrayList<String> stars = new ArrayList<String>();
     public static ArrayList<String> productStars = new ArrayList<String>();
 
-  public User(String name, int age, String email, String password, String phoneNo, String userId){
-      User.name = name;
-      User.age = age;
-      User.email = email;
-      User.password = password;
-      User.phoneNo = phoneNo;
-      User.userId = userId;
+    public User(String name, int age, String email, String password, String phoneNo, String userId) {
+        User.name = name;
+        User.age = age;
+        User.email = email;
+        User.password = password;
+        User.phoneNo = phoneNo;
+        User.userId = userId;
 
 
     }
 
-    public User(String name, int age, String email, String password, String phoneNo, String userId, ArrayList<String> listStar){
+    public User(String name, int age, String email, String password, String phoneNo, String userId, ArrayList<String> listStar) {
         User.name = name;
         User.age = age;
         User.email = email;
@@ -42,7 +42,7 @@ public class User {
         userId = user[5];
     }
 
-    public void removeUser (){
+    public void removeUser() {
         name = "";
         age = -1;
         email = "";

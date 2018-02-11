@@ -1,4 +1,4 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.views;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,15 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.twosquares.e_mandi.utils.AsyncClass;
+import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.datamodels.RowItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.twosquares.e_mandi.MainActivity.ip;
-import static com.twosquares.e_mandi.MainActivity.user;
+import static com.twosquares.e_mandi.views.MainActivity.ip;
 import static com.twosquares.e_mandi.MyApplication.userLocalStore;
-import static com.twosquares.e_mandi.UserLocalStore.SP_NAME;
+import static com.twosquares.e_mandi.utils.UserLocalStore.SP_NAME;
 
 public class ProductDetails extends AppCompatActivity {
     public static Map<String, ArrayList<ArrayList<String>>> markedProducts = new HashMap<String, ArrayList<ArrayList<String>>>();
@@ -40,7 +42,7 @@ public class ProductDetails extends AppCompatActivity {
         Button btnEditPost = (Button) findViewById(R.id.btnEditPost);
 //        String image_id = getIntent().getExtra("image_id");
         final RowItem rowItem = (RowItem) getIntent().getExtras().getSerializable("rowItem");
-        if (rowItem.getOwner_id().equals(sp.getString("userId","")) && getIntent().getExtras().getString("Adapter").equals("CustomAdapter2")){
+        if (rowItem.getOwner_id().equals(sp.getString("userId","")) && getIntent().getExtras().getString("Adapter").equals("DashboardAdapter")){
             findViewById(R.id.optionLayout).setVisibility(View.VISIBLE);
         }
         Picasso.with(this).load("http://"+ip+"/images/reduced/" +  rowItem.getImage_id() + ".jpg").into(iv);

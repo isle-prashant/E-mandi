@@ -1,7 +1,5 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.utils;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -9,43 +7,41 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ViewUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.twosquares.e_mandi.adapters.HomeAdapter;
+import com.twosquares.e_mandi.adapters.DashboardAdapter;
+import com.twosquares.e_mandi.datamodels.RowItem;
+import com.twosquares.e_mandi.datamodels.User;
+import com.twosquares.e_mandi.views.DashboardActivity;
+import com.twosquares.e_mandi.views.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.internal.Util;
 
-import static com.twosquares.e_mandi.DashboardActivity.mRecyclerViewDashboard;
-import static com.twosquares.e_mandi.DashboardActivity.rowItemList;
-import static com.twosquares.e_mandi.DashboardActivity.swipeRefreshLayoutDashboard;
-import static com.twosquares.e_mandi.MainActivity.rowItems;
-import static com.twosquares.e_mandi.MainActivity.swipeRefreshLayout;
-import static com.twosquares.e_mandi.MainActivity.user;
-import static com.twosquares.e_mandi.MyApplication.userLocalStore;
-import static com.twosquares.e_mandi.SellingActivity.initialLayout;
-import static com.twosquares.e_mandi.SellingActivity.laterLayout;
-import static com.twosquares.e_mandi.User.stars;
+import static com.twosquares.e_mandi.views.DashboardActivity.mRecyclerViewDashboard;
+import static com.twosquares.e_mandi.views.DashboardActivity.rowItemList;
+import static com.twosquares.e_mandi.views.DashboardActivity.swipeRefreshLayoutDashboard;
+import static com.twosquares.e_mandi.views.MainActivity.swipeRefreshLayout;
+import static com.twosquares.e_mandi.views.SellingActivity.initialLayout;
+import static com.twosquares.e_mandi.views.SellingActivity.laterLayout;
+import static com.twosquares.e_mandi.datamodels.User.stars;
 
 /**
  * Created by PRASHANT on 27-04-2017.
@@ -63,7 +59,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
     String deletedId;
 
 
-    AsyncClass(Context context, String action) {
+    public AsyncClass(Context context, String action) {
         this.context = context;
         this.action = action;
     }
@@ -97,7 +93,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... strings) {
-        if (action == "ViewLoader" || action == "DashboardViewLoader") {
+        if (action.equals("ViewLoader") || action.equals("DashboardViewLoader")) {
             Request request = new Request.Builder()
                     .url(strings[0])
                     .build();
@@ -113,22 +109,20 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 JSONArray arr = new JSONArray(res);
                 for (int i = 0; i < arr.length(); i++) {
                     jobj = arr.getJSONObject(i);
-                    String star = "false";
+                    Gson gson = new Gson();
+                    RowItem newItem = gson.fromJson(jobj.toString(), RowItem.class);
+                    Boolean star = false;
                     if (stars.contains(jobj.getString("image_id"))){
-                        star = "true";
+                        star = true;
                     }
-                    String items[] = new String[]{jobj.getString("title"), jobj.getString("image_id"), jobj.getString("price"), jobj.getString("phoneNo"), jobj.getString("location"), jobj.getString("description"), star, jobj.getString("ownerId"), jobj.getString("quantity")};
+                    newItem.setImportant(star);
 
-                    String image_id = jobj.getString("image_id");
-                    item = new RowItem(items);
-
-                    rowItems.add(item);
-                    Log.e("ImageId", rowItems.get(i).getImage_id());
+                    rowItems.add(newItem);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            } catch (JSONException je) {
+                je.printStackTrace();
             }
 
 
@@ -269,8 +263,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             fadeIn.setDuration(400);
             fadeIn.setFillAfter(true);
             set.addAnimation(fadeIn);
-//            Animation slideUp = new TranslateAnimation(0, 0, ViewUtils.getScreenHeight(context),0);
-            RecyclerView.Adapter customAdapter = new CustomAdapter(context, rowItems);
+            RecyclerView.Adapter customAdapter = new HomeAdapter(context, rowItems);
 
             MainActivity.mRecyclerView.setAdapter(customAdapter);
             customAdapter.notifyDataSetChanged();
@@ -300,7 +293,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                     rowItemList.add(rowItems.get(i));
                 }
             }
-            RecyclerView.Adapter customAdapter2 = new CustomAdapter2(context, rowItemList);
+            RecyclerView.Adapter customAdapter2 = new DashboardAdapter(context, rowItemList);
             mRecyclerViewDashboard.setAdapter(customAdapter2);
             customAdapter2.notifyDataSetChanged();
             swipeRefreshLayoutDashboard.setRefreshing(false);

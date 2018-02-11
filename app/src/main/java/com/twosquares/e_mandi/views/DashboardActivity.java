@@ -1,4 +1,4 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,15 +10,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import com.twosquares.e_mandi.utils.AsyncClass;
+import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.adapters.DashboardAdapter;
+import com.twosquares.e_mandi.datamodels.RowItem;
+import com.twosquares.e_mandi.datamodels.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.twosquares.e_mandi.MainActivity.ip;
-import static com.twosquares.e_mandi.MainActivity.rowItems;
-import static com.twosquares.e_mandi.MainActivity.swipeRefreshLayout;
-import static com.twosquares.e_mandi.MainActivity.user;
+import static com.twosquares.e_mandi.views.MainActivity.ip;
+import static com.twosquares.e_mandi.views.MainActivity.rowItems;
+import static com.twosquares.e_mandi.views.MainActivity.swipeRefreshLayout;
 
 
 public class DashboardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -76,7 +80,7 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
                 rowItemList.add(rowItems.get(i));
             }
         }
-        RecyclerView.Adapter customAdapter = new CustomAdapter2(this, rowItemList);
+        RecyclerView.Adapter customAdapter = new DashboardAdapter(this, rowItemList);
         mRecyclerViewDashboard.setAdapter(customAdapter);
         customAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);

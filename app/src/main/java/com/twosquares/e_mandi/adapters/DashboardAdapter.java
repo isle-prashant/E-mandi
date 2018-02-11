@@ -1,4 +1,4 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,30 +7,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.twosquares.e_mandi.views.ProductDetails;
+import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.datamodels.RowItem;
 
 import java.util.List;
 
-import static com.twosquares.e_mandi.MainActivity.ip;
-import static com.twosquares.e_mandi.MainActivity.rowItems;
-import static com.twosquares.e_mandi.MainActivity.user;
+import static com.twosquares.e_mandi.views.MainActivity.ip;
 
 /**
  * Created by PRASHANT on 22-05-2017.
  */
 
-public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHolder> {
+public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.ViewHolder> {
     Context context;
     List<RowItem> rowItem;
     int lastPosition = -1;
 
-    public CustomAdapter2(Context context, List objects) {
+    public DashboardAdapter(Context context, List objects) {
         this.context = context;
         rowItem = objects;
     }
@@ -64,7 +63,7 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
             Log.e("position", "" + getAdapterPosition());
             intent.putExtra("rowItem", rowItem.get(getAdapterPosition()));
             intent.putExtra("position", getAdapterPosition());
-            intent.putExtra("Adapter", "CustomAdapter2");
+            intent.putExtra("Adapter", "DashboardAdapter");
             System.out.println("selected row " + rowItem.get(getAdapterPosition()).getImage_id());
             mContext.startActivity(intent);
         }
@@ -83,18 +82,18 @@ public class CustomAdapter2 extends RecyclerView.Adapter<CustomAdapter2.ViewHold
     }*/
 
     @Override
-    public CustomAdapter2.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DashboardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_2, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
-        CustomAdapter2.ViewHolder vh = new CustomAdapter2.ViewHolder(v, context);
+        DashboardAdapter.ViewHolder vh = new DashboardAdapter.ViewHolder(v, context);
 
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(CustomAdapter2.ViewHolder holder, final int position) {
+    public void onBindViewHolder(DashboardAdapter.ViewHolder holder, final int position) {
 
 
         holder.mTitleView.setText(rowItem.get(position).getTitle());

@@ -1,6 +1,7 @@
-package com.twosquares.e_mandi;
+package com.twosquares.e_mandi.views;
 
 import com.daimajia.androidanimations.library.Techniques;
+import com.twosquares.e_mandi.R;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
 import com.viksaa.sssplash.lib.cnst.Flags;
 import com.viksaa.sssplash.lib.model.ConfigSplash;

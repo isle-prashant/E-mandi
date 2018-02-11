@@ -1,9 +1,9 @@
 package com.twosquares.e_mandi;
 
 import android.app.Application;
-import android.content.Intent;
 
 import com.pushbots.push.Pushbots;
+import com.twosquares.e_mandi.utils.UserLocalStore;
 
 /**
  * Created by prkumar on 5/16/2017.

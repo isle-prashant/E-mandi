@@ -11,9 +11,8 @@
     <uses-feature android:name="android.hardware.camera2"
         android:required="false" />
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="25" />
-
+        android:minSdkVersion="16"
+        android:targetSdkVersion="27" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -22,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".views.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -31,9 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SellingActivity" />
+        <activity android:name=".views.SellingActivity" />
         <activity
-            android:name=".ProductDetails"
+            android:name=".views.ProductDetails"
             android:label="@string/title_activity_product_details"
             >
             <intent-filter>
@@ -43,20 +42,20 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".UserLogin"
+        <activity android:name=".views.UserLogin"
             android:label="User login"/>
-        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".views.UserProfileActivity" />
 
-        <activity android:name=".UserRegister"
+        <activity android:name=".views.UserRegister"
             android:label="Registration"></activity>
 
-        <activity android:name=".DashboardActivity" />
-        <activity android:name=".SplashScreen" />
+        <activity android:name=".views.DashboardActivity" />
+        <activity android:name=".views.SplashScreen" />
         <activity
-            android:name=".UserListActivity"
+            android:name=".views.UserListActivity"
             android:label="Marked By" />
         <activity
-            android:name=".EditActivity"
+            android:name=".views.EditActivity"
             android:label="Edit Product" />
 
         <provider
@@ -68,7 +67,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <receiver android:name=".customHandler" />
+        <receiver android:name=".utils.customHandler" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_place_api"></meta-data>
     </application>
 
