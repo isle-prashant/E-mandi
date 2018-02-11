@@ -93,7 +93,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... strings) {
-        if (action.equals("ViewLoader") || action.equals("DashboardViewLoader")) {
+        if (action.equals("ViewLoader")) {
             Request request = new Request.Builder()
                     .url(strings[0])
                     .build();
@@ -269,23 +269,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             homeAdapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
 
-        /*    mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View childView, int position) {
-                    Log.e("size of rowItems after", "" + rowItems.size());
-                    Log.e("zeroth element", rowItems.get(0).getImage_id());
-                    Intent intent = new Intent(context, ProductDetails.class);
-                    Log.e("position", "" + position);
-                    intent.putExtra("position", rowItems.get(position));
-                    System.out.println("selected row " + rowItems.get(position).getImage_id());
-                    context.startActivity(intent);
-                }
 
-                @Override
-                public void onItemLongPress(View childView, int position) {
-
-                }
-            }));*/
         }
         if (action == "DashboardViewLoader"){
             for (int i = 0; i < rowItems.size(); i ++){

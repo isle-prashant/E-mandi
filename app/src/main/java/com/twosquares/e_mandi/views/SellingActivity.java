@@ -31,8 +31,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.twosquares.e_mandi.RequestBuilder;
-import com.twosquares.e_mandi.utils.AsyncClass;
+import com.twosquares.e_mandi.utils.RequestBuilder;
 import com.twosquares.e_mandi.R;
 import com.twosquares.e_mandi.datamodels.User;
 
