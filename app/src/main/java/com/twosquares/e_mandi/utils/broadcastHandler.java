@@ -19,7 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class customHandler extends BroadcastReceiver {
+public class broadcastHandler extends BroadcastReceiver {
     public RowItem item;
     private String TAG = "PB3";
 

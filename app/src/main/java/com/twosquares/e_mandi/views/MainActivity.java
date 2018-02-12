@@ -23,7 +23,7 @@ import com.pushbots.push.Pushbots;
 import com.twosquares.e_mandi.utils.AsyncClass;
 import com.twosquares.e_mandi.R;
 import com.twosquares.e_mandi.utils.UserLocalStore;
-import com.twosquares.e_mandi.utils.customHandler;
+import com.twosquares.e_mandi.utils.broadcastHandler;
 import com.twosquares.e_mandi.datamodels.RowItem;
 import com.twosquares.e_mandi.datamodels.User;
 
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
     private void initPushbots(){
         Pushbots.sharedInstance().registerForRemoteNotifications();
-        Pushbots.sharedInstance().setCustomHandler(customHandler.class);
+        Pushbots.sharedInstance().setCustomHandler(broadcastHandler.class);
 
     }
     @Override

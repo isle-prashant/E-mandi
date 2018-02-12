@@ -67,7 +67,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <receiver android:name=".utils.customHandler" />
+        <receiver android:name=".utils.broadcastHandler" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_place_api"></meta-data>
     </application>
 
