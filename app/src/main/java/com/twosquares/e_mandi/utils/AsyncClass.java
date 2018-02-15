@@ -35,9 +35,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.twosquares.e_mandi.views.DashboardActivity.mRecyclerViewDashboard;
 import static com.twosquares.e_mandi.views.DashboardActivity.rowItemList;
-import static com.twosquares.e_mandi.views.DashboardActivity.swipeRefreshLayoutDashboard;
 import static com.twosquares.e_mandi.views.MainActivity.swipeRefreshLayout;
 import static com.twosquares.e_mandi.views.SellingActivity.initialLayout;
 import static com.twosquares.e_mandi.views.SellingActivity.laterLayout;
@@ -71,17 +69,12 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             rowItems.clear();
             swipeRefreshLayout.setRefreshing(true);
         }
-        if (action == "UploadData" || action == "EditPost") {
+        if (action == "UploadDataManager" || action == "EditPost") {
 
             dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
             dialog.setMessage("Posting Your Ad. \nHang in There");
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
-        }
-        if (action == "DashboardViewLoader"){
-            rowItems.clear();
-            rowItemList.clear();
-            swipeRefreshLayoutDashboard.setRefreshing(true);
         }
         if (action == "DeletePost"){
             dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
@@ -127,7 +120,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
 
 
         }
-        /*if (action == "UploadData"){
+        /*if (action == "UploadDataManager"){
             Response response = null;
             RequestBody requestBody = new FormBody.Builder()
                     .add("image", strings[1])
@@ -271,18 +264,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
 
 
         }
-        if (action == "DashboardViewLoader"){
-            for (int i = 0; i < rowItems.size(); i ++){
-                if (rowItems.get(i).getOwner_id().equals(User.userId)) {
-                    rowItemList.add(rowItems.get(i));
-                }
-            }
-            RecyclerView.Adapter dashboardAdapter = new DashboardAdapter(context, rowItemList);
-            mRecyclerViewDashboard.setAdapter(dashboardAdapter);
-            dashboardAdapter.notifyDataSetChanged();
-            swipeRefreshLayoutDashboard.setRefreshing(false);
-        }
-        if (action == "UploadData") {
+        if (action == "UploadDataManager") {
             if (dialog != null)
                 dialog.dismiss();
             if (resCode == 200) {

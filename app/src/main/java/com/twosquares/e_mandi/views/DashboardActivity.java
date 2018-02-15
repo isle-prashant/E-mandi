@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,12 +25,11 @@ import static com.twosquares.e_mandi.views.MainActivity.swipeRefreshLayout;
 
 public class DashboardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    public static SwipeRefreshLayout swipeRefreshLayoutDashboard;
-    public static RecyclerView mRecyclerViewDashboard;
-    public static DashboardAdapter dashBoardAdapter;
+    private SwipeRefreshLayout swipeRefreshLayoutDashboard;
+    public RecyclerView mRecyclerViewDashboard;
+    private DashboardAdapter dashBoardAdapter;
     public static List<RowItem> rowItemList;
     private DashboardManager dashboardManager;
-    private RecyclerView.LayoutManager mLayoutManager;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -63,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        dashboardManager = new DashboardManager();
+        dashboardManager = new DashboardManager(this);
         rowItemList = new ArrayList<RowItem>();
         swipeRefreshLayoutDashboard = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout1);
         swipeRefreshLayoutDashboard.setOnRefreshListener(this);
@@ -71,7 +69,7 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
         mRecyclerViewDashboard.setHasFixedSize(true);
 
         // use a linear layout dashboardManager
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerViewDashboard.setLayoutManager(mLayoutManager);
         mRecyclerViewDashboard.setScrollBarSize(0);
         for (int i = 0; i < rowItems.size(); i++) {
@@ -90,12 +88,23 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
 
     @Override
     public void onRefresh() {
+        swipeRefreshLayoutDashboard.setRefreshing(true);
         dashboardManager.getDashboardData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    public void onResponse(Boolean status){
+        if (status){
+        dashBoardAdapter.notifyDataSetChanged();
+        } else {
+            //TODO error handling
+        }
+
+        swipeRefreshLayoutDashboard.setRefreshing(false);
     }
 
 }

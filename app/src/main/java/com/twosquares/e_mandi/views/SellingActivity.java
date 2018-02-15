@@ -31,9 +31,10 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.twosquares.e_mandi.utils.RequestBuilder;
 import com.twosquares.e_mandi.R;
 import com.twosquares.e_mandi.datamodels.User;
+import com.twosquares.e_mandi.managers.UploadDataManager;
+import com.twosquares.e_mandi.utils.RequestBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -60,20 +61,23 @@ public class SellingActivity extends AppCompatActivity {
     String ip;
     int PLACE_REQUEST = 2;
     String price, location, Description, contact, Title, quantity;
+    ProgressDialog dialog;
+    UploadDataManager uploadDataManager;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         Fragment fragment;
+
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    Intent i = new Intent(SellingActivity.this,MainActivity.class);
+                    Intent i = new Intent(SellingActivity.this, MainActivity.class);
                     finish();
                     startActivity(i);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_in_left);
                     return true;
                 case R.id.navigation_dashboard:
-                    Intent intent = new Intent(SellingActivity.this,DashboardActivity.class);
+                    Intent intent = new Intent(SellingActivity.this, DashboardActivity.class);
                     finish();
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_in_left);
@@ -90,7 +94,7 @@ public class SellingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selling);
-
+        uploadDataManager = new UploadDataManager(this);
         ip = getString(R.string.ip);
         System.out.println(ip);
 
@@ -146,20 +150,25 @@ public class SellingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 intialize();
                 if (validate()) {
+                    dialog = new ProgressDialog(SellingActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+                    dialog.setMessage("Posting Your Ad. \nHang in There");
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
                     contact = User.phoneNo;
                     RequestBuilder requestBuilder = new RequestBuilder();
-                    HashMap<String,String> params = new HashMap<>();
-                    params.put("image",encodedImage);
-                    params.put("price",price);
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("image", encodedImage);
+                    params.put("price", price);
                     params.put("location", location);
                     params.put("description", Description);
-                    params.put("phoneNo",contact);
+                    params.put("phoneNo", contact);
                     params.put("title", Title);
                     params.put("userId", User.userId);
                     params.put("quantity", quantity);
-                    Request request = requestBuilder.createPostRequest("http://" + ip + "/image.php", params);
-                    new UploadAsync(SellingActivity.this).execute(request);
-//                    AsyncClass asyncClass = new AsyncClass(SellingActivity.this, "UploadData");
+                    uploadDataManager.uploadData(params);
+//                    Request request = requestBuilder.createPostRequest("http://" + ip + "/image.php", params);
+//                    new UploadAsync(SellingActivity.this).execute(request);
+//                    AsyncClass asyncClass = new AsyncClass(SellingActivity.this, "UploadDataManager");
 //                    asyncClass.execute("http://" + ip + "/image.php", encodedImage, price, location, Description, contact, Title, quantity);
                 }
             }
@@ -209,8 +218,8 @@ public class SellingActivity extends AppCompatActivity {
         if (requestCode == PLACE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                Log.e("Place : ", ""+place.getLatLng());
-                String address = String.format(""+place.getAddress());
+                Log.e("Place : ", "" + place.getLatLng());
+                String address = String.format("" + place.getAddress());
                 locationTxt.setText(address);
             }
         }
@@ -249,17 +258,17 @@ public class SellingActivity extends AppCompatActivity {
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photo = null;
         try {
-            photo = File.createTempFile("picture",".jpg",getExternalFilesDir(null));
+            photo = File.createTempFile("picture", ".jpg", getExternalFilesDir(null));
             photo.deleteOnExit();
             System.out.println("file name" + photo);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             photo.delete();
         }
 
 
-        if (photo != null){
+        if (photo != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 m = FileProvider.getUriForFile(this, "com.example.android.fileProvider", photo);
@@ -270,7 +279,7 @@ public class SellingActivity extends AppCompatActivity {
         i.putExtra(MediaStore.EXTRA_OUTPUT, m);
         startActivityForResult(i, img);
         File file = new File(getExternalFilesDir(null), "picture.jpg");
-        if (file != null){
+        if (file != null) {
             Log.e("File", "deleted");
             file.delete();
         }
@@ -312,52 +321,17 @@ public class SellingActivity extends AppCompatActivity {
 
     }
 
-    class UploadAsync extends AsyncTask<Request, Void, Void>{
-        int resCode = 0;
-        private final OkHttpClient client = new OkHttpClient();
-        ProgressDialog dialog;
-        Context context;
-        public UploadAsync(Context context) {
-            this.context = context;
-        }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-            dialog.setMessage("Posting Your Ad. \nHang in There");
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
+    public void onResponse(Boolean status, String message) {
+        if (status) {
+            Intent i = new Intent(this, MainActivity.class);
+            ((Activity) this).finish();
+            this.startActivity(i);
+        } else {
+            //TODO error handling
         }
 
-        @Override
-        protected Void doInBackground(Request... requests) {
-            Response response = null;
-            try {
-                response = client.newCall(requests[0]).execute();
-                if (!response.isSuccessful()) {
-                    resCode = 201;
-                    throw new IOException("Unexpected code " + response);
-                } else {
-                    resCode = 200;
-                    System.out.println(response.body().string());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (dialog != null)
-                dialog.dismiss();
-            if (resCode == 200) {
-                Intent i = new Intent(context,MainActivity.class);
-                ((Activity) context).finish();
-                context.startActivity(i);
-
-            }
-        }
+        if (dialog.isShowing())
+            dialog.dismiss();
     }
 }

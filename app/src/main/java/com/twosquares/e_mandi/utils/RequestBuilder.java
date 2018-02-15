@@ -22,7 +22,7 @@ public class RequestBuilder {
         Iterator it = body.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
+//            System.out.println(pair.getKey() + " = " + pair.getValue());
             requestBuilder.add(pair.getKey().toString(), pair.getValue().toString());
         }
 
