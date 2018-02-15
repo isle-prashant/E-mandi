@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.twosquares.e_mandi.R;
 import com.twosquares.e_mandi.adapters.DashboardAdapter;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.twosquares.e_mandi.views.MainActivity.rowItems;
-import static com.twosquares.e_mandi.views.MainActivity.swipeRefreshLayout;
 
 
 public class DashboardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -80,7 +80,6 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
         dashBoardAdapter = new DashboardAdapter(this, rowItemList);
         mRecyclerViewDashboard.setAdapter(dashBoardAdapter);
         dashBoardAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation1);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_dashboard);
@@ -97,11 +96,12 @@ public class DashboardActivity extends AppCompatActivity implements SwipeRefresh
         super.onResume();
     }
 
-    public void onResponse(Boolean status){
+    public void onResponse(Boolean status, String message){
         if (status){
         dashBoardAdapter.notifyDataSetChanged();
         } else {
             //TODO error handling
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
 
         swipeRefreshLayoutDashboard.setRefreshing(false);

@@ -18,9 +18,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.pushbots.push.Pushbots;
-import com.twosquares.e_mandi.utils.AsyncClass;
+import com.twosquares.e_mandi.adapters.HomeAdapter;
+import com.twosquares.e_mandi.managers.HomeManager;
 import com.twosquares.e_mandi.R;
 import com.twosquares.e_mandi.utils.UserLocalStore;
 import com.twosquares.e_mandi.utils.broadcastHandler;
@@ -32,15 +34,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     public static String ip;
-    public static RecyclerView mRecyclerView;
     public static List <RowItem> rowItems;
-    public static SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     public static boolean openSplash = true;
     public static User user;
     public RowItem item;
-    ListView lv;
     UserLocalStore userLocalStore;
-    private RecyclerView.LayoutManager mLayoutManager;
+    HomeAdapter homeAdapter;
+    HomeManager homeManager;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         Fragment fragment;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
 //      logged in user data from shared preference
         userLocalStore= new UserLocalStore(this);
-        if (authenticate()==true){
+        if (authenticate()){
             user = userLocalStore.getLoggedinUser();
         }
         else {
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
 
         initPushbots();
-
+        homeManager = new HomeManager(this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,17 +95,19 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         isStoragePermissionGranted();
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-        mRecyclerView = (RecyclerView) findViewById(R.id.item_list);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.item_list);
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setScrollBarSize(0);
-
-
-        AsyncClass asyncClass = new AsyncClass(this, "ViewLoader");
-        asyncClass.execute("http://"+ip+"/index.json");
+        homeAdapter = new HomeAdapter(this, rowItems);
+        mRecyclerView.setAdapter(homeAdapter);
+        swipeRefreshLayout.setRefreshing(true);
+        homeManager.getHomeData();
+//        AsyncClass asyncClass = new AsyncClass(this, "ViewLoader");
+//        asyncClass.execute("http://"+ip+"/index.json");
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -135,23 +138,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
-
-            Log.e("user", String.valueOf(User.age));
             Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
             startActivity(intent);
-           /* user = null;
-            rowItems.clear();
-            User.stars.clear();
-            userLocalStore.clearUserData();
-            userLocalStore.setUserLoggedIn(false);
-            startActivity(new Intent(this, UserLogin.class));*/
         }
 
         return super.onOptionsItemSelected(item);
@@ -161,21 +151,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     //permissions
 
-    public boolean isStoragePermissionGranted() {
+    public void isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 Log.v("Permissions", "Permission is granted");
-                return true;
             } else {
 
                 Log.v("Permissions", "Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
             }
         } else { //permission is automatically granted on sdk<23 upon installation
             Log.v("Permissions", "Permission is granted");
-            return true;
         }
     }
 
@@ -183,17 +170,26 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onResume() {
         super.onResume();
-//        rowItems.clear();
         Log.e("resumed","true");
-/*        AsyncClass asyncClass = new AsyncClass(this, "ViewLoader");
-        asyncClass.execute("http://"+ip+"/index.json");*/
     }
 
 
     @Override
     public void onRefresh() {
-        AsyncClass asyncClass = new AsyncClass(MainActivity.this, "ViewLoader");
-        asyncClass.execute("http://"+ip+"/index.json");
+        swipeRefreshLayout.setRefreshing(true);
+        homeManager.getHomeData();
+//        AsyncClass asyncClass = new AsyncClass(MainActivity.this, "ViewLoader");
+//        asyncClass.execute("http://"+ip+"/index.json");
+    }
+
+    public void onResponse(Boolean status, String message){
+        if (status){
+            homeAdapter.notifyDataSetChanged();
+        } else {
+            //TODO handle error
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
 /*

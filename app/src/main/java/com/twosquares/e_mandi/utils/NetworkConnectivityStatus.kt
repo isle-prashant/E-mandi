@@ -1,4 +1,4 @@
-package com.example.jkumar78.gsonexample
+package com.twosquares.e_mandi.utils
 
 import android.content.Context
 import android.net.ConnectivityManager

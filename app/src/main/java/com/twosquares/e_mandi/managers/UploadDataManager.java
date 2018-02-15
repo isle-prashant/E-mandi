@@ -20,12 +20,16 @@ import static com.twosquares.e_mandi.views.MainActivity.ip;
  * Created by Prashant Kumar on 2/15/2018.
  */
 public class UploadDataManager extends Manager implements NetworkAsyncInterface {
-    private static int UPLOAD_DATA_REQUEST_CODE = 102;
-    SellingActivity sellingActivity;
+    private static int UPLOAD_DATA_REQUEST_CODE = 103;
+    private SellingActivity sellingActivity;
     public UploadDataManager(SellingActivity mActivity){
         sellingActivity = mActivity;
     }
     public void uploadData(HashMap<String, String> params){
+        if (!isNetworkAvailable(sellingActivity)){
+            sellingActivity.onResponse(false,"No Internet Connection");
+            return;
+        }
         RequestBuilder requestBuilder = new RequestBuilder();
         Request request = requestBuilder.createPostRequest("http://" + ip + "/image.php", params);
         new NetworkAsync(this, UPLOAD_DATA_REQUEST_CODE).execute(request);
@@ -36,12 +40,11 @@ public class UploadDataManager extends Manager implements NetworkAsyncInterface 
         if (requestCode == UPLOAD_DATA_REQUEST_CODE){
             String resBody = (String) response.get(Response.BODY);
             int responseCode = (int) response.get(Response.CODE);
-            Log.d("response code updata", String.valueOf(responseCode));
             System.out.println(resBody);
             if (responseCode == 200){
                 sellingActivity.onResponse(true, resBody);
             } else {
-                sellingActivity.onResponse(false, resBody);
+                sellingActivity.onResponse(false, String.valueOf(response.get(Response.MESSAGE)));
             }
         }
     }

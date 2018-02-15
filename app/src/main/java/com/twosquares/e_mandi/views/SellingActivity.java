@@ -327,6 +327,7 @@ public class SellingActivity extends AppCompatActivity {
             ((Activity) this).finish();
             this.startActivity(i);
         } else {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             //TODO error handling
         }
 

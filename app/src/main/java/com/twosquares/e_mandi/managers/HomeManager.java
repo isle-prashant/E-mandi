@@ -3,54 +3,49 @@ package com.twosquares.e_mandi.managers;
 import android.util.Log;
 
 import com.twosquares.e_mandi.datamodels.RowItem;
-import com.twosquares.e_mandi.datamodels.User;
 import com.twosquares.e_mandi.services.NetworkAsync;
 import com.twosquares.e_mandi.services.NetworkAsyncInterface;
 import com.twosquares.e_mandi.services.Response;
 import com.twosquares.e_mandi.utils.RequestBuilder;
-import com.twosquares.e_mandi.views.DashboardActivity;
-
+import com.twosquares.e_mandi.views.MainActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import java.util.HashMap;
-
 import okhttp3.Request;
-
 import static com.twosquares.e_mandi.datamodels.User.stars;
-import static com.twosquares.e_mandi.views.DashboardActivity.rowItemList;
 import static com.twosquares.e_mandi.views.MainActivity.ip;
 import static com.twosquares.e_mandi.views.MainActivity.rowItems;
 
 /**
- * Created by Prashant Kumar on 2/12/2018.
+ * Created by Prashant Kumar on 2/16/2018.
  */
-public class DashboardManager extends Manager implements NetworkAsyncInterface {
-    private int DASHBOARD_REQUEST_CODE = 102;
-    private DashboardActivity dashboardActivity;
-    public DashboardManager(DashboardActivity mContext){
-        this.dashboardActivity = mContext;
+public class HomeManager extends Manager implements NetworkAsyncInterface {
+    private static int HOME_REQUEST_CODE = 101;
+    private MainActivity mainActivity;
+
+    public HomeManager(MainActivity activity) {
+        this.mainActivity = activity;
     }
-    public void getDashboardData(){
-        if (!isNetworkAvailable(dashboardActivity)){
-            dashboardActivity.onResponse(false,"No Internet Connection");
+
+    public void getHomeData() {
+        if (!isNetworkAvailable(mainActivity)) {
+            mainActivity.onResponse(false, "No Internet Connection");
             return;
         }
         RequestBuilder requestBuilder = new RequestBuilder();
-        Request request = requestBuilder.createGetRequest("http://"+ip+"/index.json", null);
-        new NetworkAsync(this,DASHBOARD_REQUEST_CODE).execute(request);
+        Request request = requestBuilder.createGetRequest("http://" + ip + "/index.json", null);
+        new NetworkAsync(this, HOME_REQUEST_CODE).execute(request);
     }
 
     @Override
     public void onResponse(int requestCode, HashMap<Response, Object> response) {
-        if (requestCode == DASHBOARD_REQUEST_CODE) {
+        if (requestCode == HOME_REQUEST_CODE) {
             String resBody = (String) response.get(Response.BODY);
             int responseCode = (int) response.get(Response.CODE);
             Log.d("response code", String.valueOf(responseCode));
             System.out.println(resBody);
-            if (responseCode == 200){
+            if (responseCode == 200) {
                 rowItems.clear();
-                rowItemList.clear();
                 try {
                     jsonArray = new JSONArray(resBody);
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -65,19 +60,12 @@ public class DashboardManager extends Manager implements NetworkAsyncInterface {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    dashboardActivity.onResponse(false, "Something went wrong");
+                    mainActivity.onResponse(false, "Something went wrong");
                 }
-
-                for (int i = 0; i < rowItems.size(); i ++){
-                    if (rowItems.get(i).getOwner_id().equals(User.userId)) {
-                        rowItemList.add(rowItems.get(i));
-                    }
-                }
-                dashboardActivity.onResponse(true, String.valueOf(response.get(Response.MESSAGE)));
+                mainActivity.onResponse(true, String.valueOf(response.get(Response.MESSAGE)));
             } else {
-                dashboardActivity.onResponse(false, String.valueOf(response.get(Response.MESSAGE)));
+                mainActivity.onResponse(false, String.valueOf(response.get(Response.MESSAGE)));
             }
         }
-
     }
 }

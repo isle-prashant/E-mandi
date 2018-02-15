@@ -6,19 +6,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.twosquares.e_mandi.adapters.HomeAdapter;
-import com.twosquares.e_mandi.adapters.DashboardAdapter;
 import com.twosquares.e_mandi.datamodels.RowItem;
-import com.twosquares.e_mandi.datamodels.User;
 import com.twosquares.e_mandi.views.DashboardActivity;
 import com.twosquares.e_mandi.views.MainActivity;
 
@@ -35,11 +28,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.twosquares.e_mandi.views.DashboardActivity.rowItemList;
-import static com.twosquares.e_mandi.views.MainActivity.swipeRefreshLayout;
+import static com.twosquares.e_mandi.datamodels.User.stars;
 import static com.twosquares.e_mandi.views.SellingActivity.initialLayout;
 import static com.twosquares.e_mandi.views.SellingActivity.laterLayout;
-import static com.twosquares.e_mandi.datamodels.User.stars;
 
 /**
  * Created by Prashant Kumar on 27-04-2017.
@@ -48,12 +39,11 @@ import static com.twosquares.e_mandi.datamodels.User.stars;
 public class AsyncClass extends AsyncTask<String, Void, Void> {
     private final OkHttpClient client = new OkHttpClient();
     public RowItem item;
-    RecyclerView mRecyclerView = MainActivity.mRecyclerView;
-    List<RowItem> rowItems = MainActivity.rowItems;
+    private List<RowItem> rowItems = MainActivity.rowItems;
     Context context;
-    String action;
-    ProgressDialog dialog;
-    int resCode = 0;
+    private String action;
+    private ProgressDialog dialog;
+    private int resCode = 0;
     String deletedId;
 
 
@@ -65,10 +55,10 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        if (action == "ViewLoader"){
+       /* if (action == "ViewLoader"){
             rowItems.clear();
             swipeRefreshLayout.setRefreshing(true);
-        }
+        }*/
         if (action == "UploadDataManager" || action == "EditPost") {
 
             dialog = new ProgressDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
@@ -249,7 +239,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        if (action == "ViewLoader") {
+      /*  if (action == "ViewLoader") {
 
             AnimationSet set = new AnimationSet(true);
             Animation fadeIn = new AlphaAnimation(0.0f, 1.0f);
@@ -263,7 +253,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
             swipeRefreshLayout.setRefreshing(false);
 
 
-        }
+        }*/
         if (action == "UploadDataManager") {
             if (dialog != null)
                 dialog.dismiss();
