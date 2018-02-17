@@ -7,12 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-feature android:name="android.hardware.camera2"
         android:required="false" />
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="27" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -46,8 +43,9 @@
             android:label="User login"/>
         <activity android:name=".views.UserProfileActivity" />
 
-        <activity android:name=".views.UserRegister"
-            android:label="Registration"></activity>
+        <activity
+            android:name=".views.UserRegister"
+            android:label="Registration" />
 
         <activity android:name=".views.DashboardActivity" />
         <activity android:name=".views.SplashScreen" />
@@ -68,7 +66,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <receiver android:name=".utils.broadcastHandler" />
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_place_api"></meta-data>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_place_api" />
     </application>
 
 </manifest>

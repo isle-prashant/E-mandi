@@ -1,6 +1,7 @@
 package com.twosquares.e_mandi.views;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         else {
             startActivity(new Intent(this, UserLogin.class));
         }
-
+        initPermissions();
         initPushbots();
         homeManager = new HomeManager(this);
         setContentView(R.layout.activity_main);
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         ip = getString(R.string.ip);
         rowItems =  new ArrayList<RowItem>();
         rowItems.clear();
-        isStoragePermissionGranted();
+//        isStoragePermissionGranted();
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.item_list);
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     //permissions
 
-    public void isStoragePermissionGranted() {
+/*    public void isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         } else { //permission is automatically granted on sdk<23 upon installation
             Log.v("Permissions", "Permission is granted");
         }
-    }
+    }*/
 
 
     @Override
@@ -190,6 +191,29 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    //Permissions
+    public Boolean hasPermissions(Context context,String... permissions){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && context != null && permissions != null) {
+            for (int i = 0; i < permissions.length; i++) {
+                String permission = permissions[i];
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void initPermissions() {
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS =  new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_CONTACTS};
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
     }
 }
 /*

@@ -29,8 +29,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.twosquares.e_mandi.datamodels.User.stars;
-import static com.twosquares.e_mandi.views.SellingActivity.initialLayout;
-import static com.twosquares.e_mandi.views.SellingActivity.laterLayout;
 
 /**
  * Created by Prashant Kumar on 27-04-2017.
@@ -254,7 +252,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
 
 
         }*/
-        if (action == "UploadDataManager") {
+/*        if (action == "UploadDataManager") {
             if (dialog != null)
                 dialog.dismiss();
             if (resCode == 200) {
@@ -268,7 +266,7 @@ public class AsyncClass extends AsyncTask<String, Void, Void> {
                 initialLayout.setVisibility(View.VISIBLE);
                 laterLayout.setVisibility(View.GONE);
             }
-        }
+        }*/
         if (action == "EditPost") {
             if (dialog != null)
                 dialog.dismiss();

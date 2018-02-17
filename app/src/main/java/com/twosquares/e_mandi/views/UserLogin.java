@@ -1,5 +1,7 @@
 package com.twosquares.e_mandi.views;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.pushbots.push.Pushbots;
 import com.twosquares.e_mandi.R;
+import com.twosquares.e_mandi.utils.AsyncClass;
 import com.twosquares.e_mandi.utils.UserLocalStore;
 import com.twosquares.e_mandi.datamodels.User;
 
@@ -44,10 +47,10 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
-        etEmail= (EditText) findViewById(R.id.etEmail);
-        etPassword= (EditText) findViewById(R.id.etPassword);
-        bLogin= (Button) findViewById(R.id.bLogin);
-        tvRegisterLink= (TextView) findViewById(R.id.tvRegisterLink);
+        etEmail= findViewById(R.id.etEmail);
+        etPassword= findViewById(R.id.etPassword);
+        bLogin= findViewById(R.id.bLogin);
+        tvRegisterLink= findViewById(R.id.tvRegisterLink);
         bLogin.setOnClickListener(this);
         tvRegisterLink.setOnClickListener(this);
         userLocalStore= new UserLocalStore(this);
@@ -81,6 +84,17 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
         String name,email,password,phoneNo,userId;
         int age;
         String ServerResponse;
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(UserLogin.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+            dialog.setMessage("Logging you in. \nHang in There");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
+
         @Override
         protected Void doInBackground(String... strings) {
             Response response = null;
@@ -112,7 +126,6 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
                          age= Integer.parseInt(jobj.getString("age"));
                          phoneNo = jobj.getString("phoneNo");
                          userId= jobj.getString("userId");
-
                     }
                 }
             } catch (IOException e) {
@@ -132,11 +145,14 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
                 User registerData = new User(name, age, email, password, phoneNo, userId,new ArrayList<String>());
                 userLocalStore.storeUserData(registerData);
                 userLocalStore.setUserLoggedIn(true);
-                Pushbots.sharedInstance().setAlias(User.userId);
+                Pushbots.setAlias(User.userId);
                 com.twosquares.e_mandi.utils.AsyncClass asyncClass = new com.twosquares.e_mandi.utils.AsyncClass(UserLogin.this, "ViewLoader");
                 asyncClass.execute("http://"+ip+"/index.json");
                 finish();
             }
+
+            if (dialog.isShowing())
+                dialog.dismiss();
         }
     }
 }

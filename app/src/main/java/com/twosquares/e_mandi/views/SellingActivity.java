@@ -48,7 +48,7 @@ import okhttp3.Response;
 
 public class SellingActivity extends AppCompatActivity {
 
-    public static LinearLayout initialLayout, laterLayout;
+    public LinearLayout initialLayout, laterLayout;
     public static String image_id = null;
     static String encodedImage;
     static String filePath;
@@ -166,8 +166,6 @@ public class SellingActivity extends AppCompatActivity {
                     params.put("userId", User.userId);
                     params.put("quantity", quantity);
                     uploadDataManager.uploadData(params);
-//                    Request request = requestBuilder.createPostRequest("http://" + ip + "/image.php", params);
-//                    new UploadAsync(SellingActivity.this).execute(request);
 //                    AsyncClass asyncClass = new AsyncClass(SellingActivity.this, "UploadDataManager");
 //                    asyncClass.execute("http://" + ip + "/image.php", encodedImage, price, location, Description, contact, Title, quantity);
                 }
@@ -219,7 +217,7 @@ public class SellingActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
                 Log.e("Place : ", "" + place.getLatLng());
-                String address = String.format("" + place.getAddress());
+                String address = "" + place.getAddress();
                 locationTxt.setText(address);
             }
         }
