@@ -33,7 +33,7 @@ public class SplashScreen extends AwesomeSplash {
 
         //Customize Path
         configSplash.setPathSplash(JOB_AND_TALENT); //set path String
-        configSplash.setOriginalHeight(400); //in relation to your svg (path) resource
+        configSplash.setOriginalHeight(500); //in relation to your svg (path) resource
         configSplash.setOriginalWidth(500); //in relation to your svg (path) resource
         configSplash.setAnimPathStrokeDrawingDuration(3000);
         configSplash.setPathSplashStrokeSize(2); //I advise value be <5

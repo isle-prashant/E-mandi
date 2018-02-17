@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-feature android:name="android.hardware.camera2"
         android:required="false" />
+
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -48,7 +50,8 @@
             android:label="Registration" />
 
         <activity android:name=".views.DashboardActivity" />
-        <activity android:name=".views.SplashScreen" />
+        <activity android:name=".views.SplashScreen"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".views.UserListActivity"
             android:label="Marked By" />
